@@ -26,7 +26,7 @@ public class Direccion {
 
     private String pais;
 
-    @Override
+
     public String toString() {
         return "Direccion{" +
                 "ciudad='" + ciudad + '\'' +

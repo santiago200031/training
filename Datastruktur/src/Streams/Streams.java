@@ -1,4 +1,4 @@
-package Programme.Streams;
+package src.Streams;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,11 +17,10 @@ public class Streams {
         }
 
 
-        /*
- List<Integer> collect = queue.parallelStream().map(x -> x * x).collect(Collectors.toList()).parallelStream().filter(x -> x % 2 == 0).collect(Collectors.toList());
+        List<Integer> collect = queue.parallelStream().map(x -> x * x).collect(Collectors.toList()).parallelStream().filter(x -> x % 2 == 0).collect(Collectors.toList());
         collect.parallelStream().forEach(System.out::println);
         List<Integer> integers = stack.stream().toList();
-         */
+
 
     }
 }

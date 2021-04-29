@@ -13,11 +13,11 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public Direccion getDireccion() {
+    public Prueba001.Direccion getDireccion() {
         return direccion;
     }
 
-    @Override
+
     public String toString() {
         return "Persona{" +
                 "nombre='" + nombre + '\'' +
@@ -25,13 +25,13 @@ public class Persona {
                 '}';
     }
 
-    public void setDireccion(Direccion direccion) {
+    public void setDireccion(Prueba001.Direccion direccion) {
         this.direccion = direccion;
     }
 
     private String nombre;
 
     @Autowired
-    private Direccion direccion;
+    private Prueba001.Direccion direccion;
 
 }
