@@ -11,7 +11,7 @@ public class Gestor {
     }
 
     public void insertarVertice(Integer i) {
-        System.out.println("Insertando...");
+        System.out.println("Insertando...\n");
         if (graph.insertarVertice(i)) {
             System.out.println("Vertice insertado: " + i);
         } else {
@@ -20,7 +20,7 @@ public class Gestor {
     }
 
     public void insertarVecino(Integer vertice, Integer verticeVecino) {
-        System.out.println("Insertando...");
+        System.out.println("Insertando...\n");
         if (graph.insertarVecino(vertice, verticeVecino)) {
             System.out.println("Vertice: " + vertice + "\tVertice Vecino: " + verticeVecino);
         } else {
@@ -29,7 +29,7 @@ public class Gestor {
     }
 
     public void printgraph() {
-        System.out.println("Imprimiendo grafo...");
+        System.out.println("Imprimiendo grafo...\n");
         this.graph.printGrafo();
     }
 
@@ -38,7 +38,7 @@ public class Gestor {
     }
 
     public void verVecinosDe(Integer vertice) {
-        System.out.println("Imprimiendo vecinos de: " + vertice);
+        System.out.println("Imprimiendo vecinos de: " + vertice + "\n");
         if (!this.graph.verVecinosDe(vertice)) {
             System.out.println("Error al imprimir los vecinos de: " + vertice);
         }
