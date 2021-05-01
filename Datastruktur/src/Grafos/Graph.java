@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class Graph {
-    private HashMap<Integer, ArrayList<Integer>> grafo;
+    private final HashMap<Integer, ArrayList<Integer>> grafo;
 
     public Graph() {
         this.grafo = new HashMap<>();
@@ -49,6 +49,7 @@ public class Graph {
         }
         System.out.print(vertice + " -> ");
         this.grafo.get(vertice).forEach(vecino -> System.out.print(vecino + " "));
+        System.out.println();
         return true;
     }
 
@@ -57,8 +58,13 @@ public class Graph {
         if (!this.grafo.containsKey(vertice0) || !this.grafo.containsKey(vertice1)) {
             return null;
         }
+        System.out.println();
         //Excepciones: Si no existen vecinos comunes, retorna []
         return (ArrayList<Integer>) this.getVecinosDe(vertice0).parallelStream().filter(this.getVecinosDe(vertice1)::contains).collect(Collectors.toList());
+    }
+
+    public void verVecinosComunesEntre(Integer vertice0, Integer vertice1) {
+        System.out.println(this.getVecinosDe(vertice0).parallelStream().filter(this.getVecinosDe(vertice1)::contains).collect(Collectors.toList()));
     }
 
     @Override

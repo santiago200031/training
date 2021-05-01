@@ -1,33 +1,18 @@
 package Grafos;
 
-import java.util.Scanner;
-
 public class Vista {
 
-    class Input {
-        private Scanner input = new Scanner(System.in);
-
-        public Integer insertarEntero() {
-            return input.nextInt();
-        }
-
-        public String insertarString() {
-            return input.nextLine().toUpperCase();
-        }
-
-        public void closeScanner() {
-            this.input.close();
-        }
-    }
 
     private final Gestor gestor;
+    private final Input input;
 
     Vista() {
-        gestor = new Gestor();
+        this.gestor = new Gestor();
+        this.input = new Input();
     }
 
     public void init() {
-        Input input = new Input();
+
         String userInput;
         do {
             System.out.println("""
@@ -38,39 +23,87 @@ public class Vista {
                     5. Ver grafo.
                     salir = exit = beenden
                     """);
-            userInput = input.insertarString();
+            userInput = Input.insertarString();
 
-            switch (userInput) {
-                case "1" -> {
-                    System.out.print("Valor del vértice: ");
-                    this.gestor.insertarVertice(input.insertarEntero());
+            if (userInput != null) {
+                switch (userInput) {
+                    case "1" -> insertarVertice();
+                    case "2" -> insertarVecino();
+                    case "3" -> verVecinoVertice();
+                    case "4" -> verVecinoComun();
+                    case "5" -> this.gestor.printGraph();
+                    default -> System.err.println("Valor no válido");
                 }
-                case "2" -> {
-                    System.out.print("Insertar vecino del vértice (Seperar con espacio): ");
-                    String[] values = input.insertarString().split(" ");
-                    if (values.length != 2) {
-                        break;
-                    }
-                    this.gestor.insertarVecino(input.insertarEntero(), input.insertarEntero());
-                }
-                case "3" -> {
-                    System.out.print("Ver vecino del vértice: ");
-                    this.gestor.getVecinosDe(input.insertarEntero());
-                }
-                case "4" -> {
-                    System.out.print("Ver vecinos comunes de los vértices (Seperar con espacio): ");
-                    String[] values = input.insertarString().split(" ");
-                    if (values.length != 2) {
-                        break;
-                    }
-                    this.gestor.getVecinosComunesEntre(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-                }
-                case "5" -> {
-                    this.gestor.printgraph();
-                }
+            } else {
+                esNull();
+                userInput = "";
             }
         } while (!userInput.equals("SALIR") && !userInput.equals("EXIT") && !userInput.equals("BEENDEN"));
-        input.closeScanner();
+        Input.closeBufferedReader();
+    }
+
+    private void esNull() {
+        System.err.println("Inserte un valor\n");
+    }
+
+    private void verVecinoComun() {
+        String[] values;
+        do {
+            System.out.print("Ver vecinos comunes de los vértices (Seperar con espacio): ");
+            values = Input.insertarVariosValores();
+        } while (values == null || values.length != 2 || values[0] == null || values[1] == null ||
+                !this.gestor.verVecinosComunesEntre(Integer.parseInt(values[0]), Integer.parseInt(values[1])));
+        /*
+        String[] values;
+        do {
+            System.out.print("Ver vecinos comunes de los vértices (Seperar con espacio): ");
+            values = Input.insertarVariosValores();
+            if (values.length != 2) {
+                System.out.println("Formato: X Y");
+            }
+        } while (values.length != 2);
+        this.gestor.verVecinosComunesEntre(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+         */
+    }
+
+    private void verVecinoVertice() {
+        Integer vertice;
+        do {
+            System.out.print("Ver vecinos del vértice: ");
+            vertice = Input.insertarEntero();
+        } while (!this.gestor.verVecinosDe(vertice));
+    }
+
+    private void insertarVertice() {
+        Integer vertice;
+        do {
+            System.out.print("Valor del vértice: ");
+            vertice = Input.insertarEntero();
+        } while (!this.gestor.insertarVertice(vertice));
+
+    }
+
+    private void insertarVecino() {
+        String[] values;
+        do {
+            System.out.print("Insertar vecino del vértice (Seperar con espacio): ");
+            values = Input.insertarVariosValores();
+        } while (values == null || values.length != 2 || values[0] == null || values[1] == null ||
+                !this.gestor.insertarVecino(Integer.parseInt(values[0]), Integer.parseInt(values[1])));
+
+        /*
+        String[] values;
+        do {
+            System.out.print("Insertar vecino del vértice (Seperar con espacio): ");
+            values = Input.insertarVariosValores();
+            if (values.length != 2) {
+                System.out.println("Formato: X Y");
+            }
+        } while (values.length != 2);
+        this.gestor.insertarVecino(Input.insertarEntero(), Input.insertarEntero());
+
+         */
+
     }
 
 
