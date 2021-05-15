@@ -10,10 +10,12 @@ public class ContadorIslas {
 
         private final Integer[][] celdas;
 
+        //Grid Cuadrado
         Grid(int xy) {
             this.celdas = new Integer[xy][xy];
         }
 
+        //Grid Rectangular
         Grid(int x, int y) {
             this.celdas = new Integer[x][y];
         }

@@ -1,9 +1,9 @@
-package Grafos;
+package Grafos.WithWeight;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 class Input {
     private static final BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -73,10 +73,10 @@ public class Gestor {
         return false;
     }
 
-    public boolean insertarVecino(Integer vertice, Integer verticeVecino) {
+    public boolean insertarVecino(Integer vertice, Integer verticeVecino, Float peso) {
         if (vertice != null && verticeVecino != null) {
             System.out.println("Insertando...\n");
-            if (this.graph.insertarVecino(vertice, verticeVecino)) {
+            if (this.graph.insertarVecino(vertice, verticeVecino, peso)) {
                 System.out.println("Vertice: " + vertice + "\tVertice Vecino: " + verticeVecino + "\n");
                 return true;
             }
@@ -92,7 +92,7 @@ public class Gestor {
         this.graph.printGrafo();
     }
 
-    public ArrayList<Integer> getVecinosDe(Integer vertice) {
+    public HashMap<Integer, Float> getVecinosDe(Integer vertice) {
         if (vertice != null) {
             return this.graph.getVecinosDe(vertice);
         }
@@ -107,7 +107,7 @@ public class Gestor {
         return false;
     }
 
-    public ArrayList<Integer> getVecinosComunesEntre(Integer vertice0, Integer vertice1) {
+    public HashMap<HashMap<Integer, Float>, HashMap<Integer, Float>> getVecinosComunesEntre(Integer vertice0, Integer vertice1) {
         if (vertice0 != null && vertice1 != null) {
             return this.graph.getVecinosComunesEntre(vertice0, vertice1);
         }

@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.WithoutWeight;
 
 public class Vista {
 
@@ -53,17 +53,6 @@ public class Vista {
             values = Input.insertarVariosValores();
         } while (values == null || values.length != 2 || values[0] == null || values[1] == null ||
                 !this.gestor.verVecinosComunesEntre(Integer.parseInt(values[0]), Integer.parseInt(values[1])));
-        /*
-        String[] values;
-        do {
-            System.out.print("Ver vecinos comunes de los vértices (Seperar con espacio): ");
-            values = Input.insertarVariosValores();
-            if (values.length != 2) {
-                System.out.println("Formato: X Y");
-            }
-        } while (values.length != 2);
-        this.gestor.verVecinosComunesEntre(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-         */
     }
 
     private void verVecinoVertice() {
@@ -91,20 +80,5 @@ public class Vista {
         } while (values == null || values.length != 2 || values[0] == null || values[1] == null ||
                 !this.gestor.insertarVecino(Integer.parseInt(values[0]), Integer.parseInt(values[1])));
 
-        /*
-        String[] values;
-        do {
-            System.out.print("Insertar vecino del vértice (Seperar con espacio): ");
-            values = Input.insertarVariosValores();
-            if (values.length != 2) {
-                System.out.println("Formato: X Y");
-            }
-        } while (values.length != 2);
-        this.gestor.insertarVecino(Input.insertarEntero(), Input.insertarEntero());
-
-         */
-
     }
-
-
 }

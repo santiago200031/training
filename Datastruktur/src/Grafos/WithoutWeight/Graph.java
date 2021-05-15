@@ -1,4 +1,4 @@
-package Grafos;
+package Grafos.WithoutWeight;
 
 import java.util.ArrayList;
 import java.util.HashMap;
