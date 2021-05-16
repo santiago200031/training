@@ -4,11 +4,10 @@ public class Vista {
 
 
     private final Gestor gestor;
-    private final Input input;
 
     Vista() {
         this.gestor = new Gestor();
-        this.input = new Input();
+        Input input = new Input();
     }
 
     public void init() {
@@ -75,10 +74,10 @@ public class Vista {
     private void insertarVecino() {
         String[] values;
         do {
-            System.out.print("Insertar vecino del vértice (Seperar con espacio): ");
+            System.out.print("Insertar vecino del vértice y peso (Seperar con espacio): ");
             values = Input.insertarVariosValores();
         } while (values == null || values.length != 3 || values[0] == null || values[1] == null || values[2] == null ||
-                !this.gestor.insertarVecino(Integer.parseInt(values[0]), Integer.parseInt(values[1]), Float.parseFloat(values[2])));
+                !this.gestor.insertarVecino(Integer.parseInt(values[0]), Integer.parseInt(values[1]), Float.parseFloat(values[2].replace(",", "."))));
 
     }
 }

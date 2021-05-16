@@ -77,7 +77,7 @@ public class Gestor {
         if (vertice != null && verticeVecino != null) {
             System.out.println("Insertando...\n");
             if (this.graph.insertarVecino(vertice, verticeVecino, peso)) {
-                System.out.println("Vertice: " + vertice + "\tVertice Vecino: " + verticeVecino + "\n");
+                System.out.println("Vertice: " + vertice + "\tVertice Vecino: " + verticeVecino + "\t Con el Peso de: " + peso + "\n");
                 return true;
             }
             System.err.println("Fallo al insertar el vecino " + verticeVecino + " del vertice " + vertice);
