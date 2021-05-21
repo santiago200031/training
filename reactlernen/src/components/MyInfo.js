@@ -6,9 +6,9 @@ function MyInfo() {
             <h1>Santiago Villavicencio</h1>
             <p>Ich bin Santiago Villavicencio und lerne zurzeit React</p>
             <ol>
-                <li id="3">Würzburg</li>
-                <li id="2">Russland</li>
-                <li id="1">Augsburg</li>
+                <li>Augsburg</li>
+                <li>München</li>
+                <li>Würzburg</li>
             </ol>
         </div>
     )
