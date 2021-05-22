@@ -2,36 +2,35 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ba4b79e-cbf4-4f70-b18e-b59d326c6085" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/reactlernen.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projekt001/reactlernen.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projekt002/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projekt002/projekt002.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/logo192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/robots.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/reactlernen.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MyApp.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Content.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Footer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MyInfo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/projekt002/src/components/App.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projekt002/src/components/components/ItemList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projekt002/src/components/components/todo-list.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projekt002/src/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projekt002/src/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt001/src/components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/projekt001/src/components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/App.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/projekt002/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projekt002/src/setupTests.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -46,12 +45,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/projekt002" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -67,13 +68,15 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -90,7 +93,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1621632853357</updated>
-      <workItem from="1621632857026" duration="1315000" />
+      <workItem from="1621632857026" duration="3181000" />
+      <workItem from="1621722926450" duration="844000" />
     </task>
     <servers />
   </component>
@@ -107,6 +111,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
