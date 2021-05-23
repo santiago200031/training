@@ -4,8 +4,8 @@ import ItemList from "./ItemList"
 function TodoList() {
     return (
         <div className={"todo-list"}>
-            <ItemList/>
-            <ItemList/>
+            <ItemList />
+            <ItemList />
         </div>
     )
 }

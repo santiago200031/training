@@ -1,10 +1,12 @@
 import React from "react"
 
 function ItemList() {
-    <div>
-        <input type={"checklist"}/>
-        <p id={"texto"}/>
-    </div>
+    return (
+        <div className={"item-list"}>
+            <input type={"checkbox"}/>
+            <p>Texto</p>
+        </div>
+    )
 }
 
 export default ItemList
