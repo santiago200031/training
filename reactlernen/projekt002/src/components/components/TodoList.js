@@ -3,7 +3,7 @@ import ItemList from "./ItemList"
 
 function TodoList() {
     return (
-        <div className={"todo-list"}>
+        <div className="todo-list">
             <ItemList />
             <ItemList />
         </div>

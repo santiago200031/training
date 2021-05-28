@@ -2,7 +2,7 @@ import React from "react"
 
 function ItemList() {
     return (
-        <div className={"item-list"}>
+        <div className="item-list">
             <input type={"checkbox"}/>
             <p>Texto</p>
         </div>
