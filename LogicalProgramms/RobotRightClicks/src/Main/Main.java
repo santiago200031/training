@@ -17,9 +17,14 @@ public class Main {
         changeWindow(rob);
         do {
             waitFor(TIME_DELAY);
-            typeRightKey(rob);
+            pressAndRelease(rob, RIGHT);
             TIMES_TO_PRESS--;
         } while (!finished(TIMES_TO_PRESS));
+    }
+
+    private static void pressAndRelease(Robot robot, int whichKey) {
+        robot.keyPress(whichKey);
+        robot.keyRelease(whichKey);
     }
 
     private static void waitFor(float seconds) {
@@ -30,17 +35,8 @@ public class Main {
         }
     }
 
-    private static boolean finished(int time) {
-        return time == 0;
-    }
-
-    private static void typeRightKey(Robot robot) {
-        pressRightKey(robot);
-    }
-
-    private static void pressRightKey(Robot robot) {
-        robot.keyPress(RIGHT);
-        robot.keyRelease(RIGHT);
+    private static boolean finished(int times) {
+        return times == 0;
     }
 
     private static void changeWindow(Robot robot) {
