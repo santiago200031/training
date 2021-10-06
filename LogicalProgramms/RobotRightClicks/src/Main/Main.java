@@ -1,13 +1,14 @@
 package Main;
 
-import java.awt.Robot;
-import java.awt.AWTException;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Main {
     static Robot rob;
-    static int TIMES_TO_PRESS = 300;
-    static float TIME_DELAY = 0.4f;
+    static int NUMBER_OF_STORIES = 0;
+    static int BG_COLOR = -15066598;
+    static float TIME_DELAY = 0.5f;
+
     static int ALT = KeyEvent.VK_ALT;
     static int TAB = KeyEvent.VK_TAB;
     static int RIGHT = KeyEvent.VK_RIGHT;
@@ -18,9 +19,23 @@ public class Main {
         do {
             waitFor(TIME_DELAY);
             pressAndRelease(rob, RIGHT);
-            TIMES_TO_PRESS--;
-        } while (!finished(TIMES_TO_PRESS));
+            incrementStoryCounter();
+            printNumberOfStories();
+        } while (!finished(getColorScreen(rob)));
     }
+
+    private static void incrementStoryCounter() {
+        NUMBER_OF_STORIES++;
+    }
+
+    private static void printNumberOfStories() {
+        System.out.println("Story number " + NUMBER_OF_STORIES);
+    }
+
+    private static Color getColorScreen(Robot rob) {
+        return rob.getPixelColor(1000, 100);
+    }
+
 
     private static void pressAndRelease(Robot robot, int whichKey) {
         robot.keyPress(whichKey);
@@ -35,8 +50,8 @@ public class Main {
         }
     }
 
-    private static boolean finished(int times) {
-        return times == 0;
+    private static boolean finished(Color bgColor) {
+        return bgColor.getRGB() != BG_COLOR;
     }
 
     private static void changeWindow(Robot robot) {
