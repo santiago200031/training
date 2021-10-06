@@ -1,0 +1,3 @@
+C:/Users/villa/Documents/Programmieren I/Ubungen/ProgrammOne/cmake-build-debug/CMakeFiles/ProgrammOne.dir
+C:/Users/villa/Documents/Programmieren I/Ubungen/ProgrammOne/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/villa/Documents/Programmieren I/Ubungen/ProgrammOne/cmake-build-debug/CMakeFiles/rebuild_cache.dir
