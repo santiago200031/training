@@ -53,10 +53,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\villa\Documents\Programmieren I\Hausaufgaben\HA1"
+CMAKE_SOURCE_DIR = "C:\Users\villa\Documents\IdeaProjects\GitHubProjekts\Programmieren I\Hausaufgaben\HA1"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\villa\Documents\Programmieren I\Hausaufgaben\HA1\cmake-build-debug"
+CMAKE_BINARY_DIR = "C:\Users\villa\Documents\IdeaProjects\GitHubProjekts\Programmieren I\Hausaufgaben\HA1\cmake-build-debug"
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -80,14 +80,14 @@ clean: CMakeFiles/HA1.dir/clean
 CMakeFiles/HA1.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\HA1.dir\build.make CMakeFiles/HA1.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\HA1.dir\build.make CMakeFiles/HA1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="C:\Users\villa\Documents\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" --progress-num=1,2 "Built target HA1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="C:\Users\villa\Documents\IdeaProjects\GitHubProjekts\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" --progress-num=1,2 "Built target HA1"
 .PHONY : CMakeFiles/HA1.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/HA1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\villa\Documents\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\villa\Documents\IdeaProjects\GitHubProjekts\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/HA1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\villa\Documents\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\villa\Documents\IdeaProjects\GitHubProjekts\Programmieren I\Hausaufgaben\HA1\cmake-build-debug\CMakeFiles" 0
 .PHONY : CMakeFiles/HA1.dir/rule
 
 # Convenience name for target.

@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/Users/villa/Documents/Programmieren I/Hausaufgaben/HA1/main.c" "C:/Users/villa/Documents/Programmieren I/Hausaufgaben/HA1/cmake-build-debug/CMakeFiles/HA1.dir/main.c.obj"
+  "C:/Users/villa/Documents/IdeaProjects/GitHubProjekts/Programmieren I/Hausaufgaben/HA1/main.c" "C:/Users/villa/Documents/IdeaProjects/GitHubProjekts/Programmieren I/Hausaufgaben/HA1/cmake-build-debug/CMakeFiles/HA1.dir/main.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
