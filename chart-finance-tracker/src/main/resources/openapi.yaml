@@ -1,0 +1,26 @@
+openapi: 3.0.3
+info:
+  title: Static OpenAPI document of finance model
+  description: Finance resources Open API documentation
+  version: "1.0"
+
+servers:
+  - url: http://localhost:8080/q/openapi
+    description: Optional dev mode server description
+
+paths:
+  /run:
+    get:
+      responses:
+        200:
+          description: OK - start the timed function
+          content:
+            application/json: { }
+components:
+  schemas:
+    Finance:
+      properties:
+        description:
+          type: string
+        name:
+          type: string
