@@ -90,12 +90,12 @@ public class FinanceHttpController {
 
     public Finance getFinance(UUID activityId, String apiUrl) {
         String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeParser.toFinance(jsonResponse);
+        return financeParser.jsonToFinance(jsonResponse);
     }
 
     public List<Finance> getFinances(UUID activityId, String apiUrl) {
         String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeParser.toFinanceList(jsonResponse);
+        return financeParser.jsonToFinanceList(jsonResponse);
     }
 
     public FinanceChart getFinanceChart(String apiUrl, UUID activityId) {

@@ -52,7 +52,7 @@ public class FinanceController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return financeParser.toFinance(jsonResponse);
+        return financeParser.jsonToFinance(jsonResponse);
     }
 
     public Finance getBTC(UUID activityId) {
@@ -64,7 +64,7 @@ public class FinanceController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return financeParser.toFinance(jsonResponse);
+        return financeParser.jsonToFinance(jsonResponse);
     }
 
     public List<Finance> getFinances(UUID activityId) {
@@ -76,7 +76,7 @@ public class FinanceController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return financeParser.toFinanceList(jsonResponse);
+        return financeParser.jsonToFinanceList(jsonResponse);
     }
 
     private String makeGetRequest(String apiUrl, UUID activityId) throws Exception {
