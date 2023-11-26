@@ -18,7 +18,7 @@ public class FinanceChartParser {
     private static final Logger LOGGER = Logger.getLogger(FinanceChartParser.class);
 
     @Inject
-    private Gson gson;
+    Gson gson;
 
     public String toJson(Finance finance) {
         LOGGER.debug("Parsing Finance Object to JSON: " + finance);

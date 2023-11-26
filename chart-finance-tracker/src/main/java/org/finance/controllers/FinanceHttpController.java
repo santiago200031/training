@@ -1,33 +1,21 @@
 package org.finance.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import org.apache.log4j.Logger;
-import org.finance.models.Finance;
-import org.finance.models.FinanceChart;
-import org.finance.utils.FinanceChartParser;
-import org.finance.utils.FinanceParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class FinanceHttpController {
 
-    private static final Logger LOGGER = Logger.getLogger(FinanceHttpController.class);
+    private final Logger LOGGER = Logger.getLogger(this.getClass());
 
-    @Inject
-    FinanceParser financeParser;
-
-    @Inject
-    FinanceChartParser financeChartParser;
-
-    private String makeHttpRequest(String apiUrl, UUID activityId) {
+    public String makeHttpRequest(String apiUrl, UUID activityId) {
         String jsonResponse;
         LOGGER.debug("ActivityId: " + activityId);
 
@@ -39,7 +27,7 @@ public class FinanceHttpController {
         return jsonResponse;
     }
 
-    public String makeGetRequest(String apiUrl, UUID activityId) throws Exception {
+    private String makeGetRequest(String apiUrl, UUID activityId) throws Exception {
         String apiUrlWithActId = apiUrl.replace("activity_id", activityId.toString());
         LOGGER.debug(apiUrlWithActId);
 
@@ -58,7 +46,6 @@ public class FinanceHttpController {
             connection.disconnect();
         }
     }
-
 
     private HttpURLConnection openConnection(String apiUrl) throws Exception {
         URI uri;
@@ -86,25 +73,5 @@ public class FinanceHttpController {
 
             return response.toString();
         }
-    }
-
-    public Finance getFinance(UUID activityId, String apiUrl) {
-        String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeParser.jsonToFinance(jsonResponse);
-    }
-
-    public List<Finance> getFinances(UUID activityId, String apiUrl) {
-        String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeParser.jsonToFinanceList(jsonResponse);
-    }
-
-    public FinanceChart getFinanceChart(String apiUrl, UUID activityId) {
-        String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeChartParser.toFinanceChart(jsonResponse);
-    }
-
-    public List<FinanceChart> getFinanceCharts(String apiUrl, UUID activityId) {
-        String jsonResponse = makeHttpRequest(apiUrl, activityId);
-        return financeChartParser.toFinanceChartList(jsonResponse);
     }
 }
