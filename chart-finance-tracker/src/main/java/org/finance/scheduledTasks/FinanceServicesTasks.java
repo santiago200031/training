@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.finance.utils.CSVFileProperties.BTC_FILE_PATH;
 import static org.finance.utils.CSVFileProperties.DEKA_FILE_PATH;
@@ -41,63 +44,60 @@ public class FinanceServicesTasks {
     @Inject
     FinanceCSVWriter financeCSVWriter;
 
-    //apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM
-
     @Scheduled(every = "25s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInDekaFileIfPriceHasChanged() {
-        UUID activityId = userService.getActivityId();
-        Finance currentDeka = financeService.getDekaGlobalChampions(activityId);
-        Finance previousFinance = financeService.getPreviousFinanceDeka();
-
-        if (this.firstStartDeka) {
-            LOGGER.info("Task saveInDekaFileIfPriceHasChanged() started...");
-            if (previousFinance == null) {
-                handleFirstExecutionWithNoDataInFile(currentDeka, DEKA_FILE_PATH);
-            }
-            this.firstStartDeka = false;
-            return;
-        }
-
-        assert previousFinance != null;
-        float differencePrice = priceDifferenceServiceDeka.getDifferencePrice(currentDeka, previousFinance);
-
-        if (checkIfDiffIsToSave(differencePrice)) {
-            LOGGER.info("Saving in {}", currentDeka);
-            handleSaveInFile(currentDeka, differencePrice, DEKA_FILE_PATH);
-
-        }
+        saveInFileIfPriceHasChanged(
+                DEKA_FILE_PATH,
+                this.firstStartDeka,
+                financeService::getDekaGlobalChampions,
+                financeService::getPreviousFinanceDeka,
+                priceDifferenceServiceDeka::getDifferencePrice
+        );
+        this.firstStartDeka = false;
     }
 
-    //@Scheduled(every = "10s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "10s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInBTCFileIfPriceHasChanged() {
-        UUID activityId = userService.getActivityId();
-        Finance currentBTC = financeService.getBTC(activityId);
-        Finance previousFinance = financeService.getPreviousFinanceBTC();
-
-        if (this.firstStartBTC) {
-            LOGGER.info("Task saveInBTCFileIfPriceHasChanged() started...");
-            if (previousFinance == null) {
-                handleFirstExecutionWithNoDataInFile(currentBTC, BTC_FILE_PATH);
-            }
-            this.firstStartBTC = false;
-            return;
-        }
-        if (previousFinance == null) {
-            previousFinance = currentBTC;
-        }
-
-        assert previousFinance != null;
-        float differencePrice = priceDifferenceServiceBTC.getDifferencePrice(currentBTC, previousFinance);
-
-        if (checkIfDiffIsToSave(differencePrice)) {
-            LOGGER.info("Saving in {}", currentBTC);
-            handleSaveInFile(currentBTC, differencePrice, BTC_FILE_PATH);
-
-        }
+        saveInFileIfPriceHasChanged(
+                BTC_FILE_PATH,
+                this.firstStartBTC,
+                financeService::getBTC,
+                financeService::getPreviousFinanceBTC,
+                priceDifferenceServiceBTC::getDifferencePrice
+        );
+        this.firstStartBTC = false;
     }
 
-    private boolean checkIfDiffIsToSave(float differencePrice) {
-        return differencePrice < -1f || differencePrice > 1f;
+    private void saveInFileIfPriceHasChanged(
+            CSVFileProperties path,
+            boolean isFirstStart,
+            Function<UUID, Finance> getCurrentFinance,
+            Supplier<Finance> getPreviousFinance,
+            BiFunction<Finance, Finance, Float> getDifferencePriceFunction
+    ) {
+        UUID activityId = userService.getActivityId();
+        Finance currentFinance = getCurrentFinance.apply(activityId);
+        Finance previousFinance = getPreviousFinance.get();
+
+        if (isFirstStart) {
+            String methodName = currentFinance.getDisplayName().trim();
+            LOGGER.debug("Task save{}InFileIfPriceHasChanged() started...", methodName);
+            if (previousFinance == null) {
+                handleFirstExecutionWithNoDataInFile(currentFinance, path);
+            }
+            return;
+        }
+
+        if (previousFinance == null) {
+            previousFinance = currentFinance;
+        }
+
+        float differencePrice = getDifferencePriceFunction.apply(currentFinance, previousFinance);
+
+        if (checkIfDiffIsToSave(differencePrice)) {
+            LOGGER.debug("Saving in {}", currentFinance.getDisplayName().trim());
+            handleSaveInFile(currentFinance, differencePrice, path);
+        }
     }
 
     private void handleSaveInFile(Finance currentFinance, float differencePrice, CSVFileProperties path) {
@@ -106,17 +106,17 @@ public class FinanceServicesTasks {
         switch (path) {
             case DEKA_FILE_PATH:
                 financeService.setPreviousFinanceDeka(currentFinance);
-                financeCSVWriter.appendFinanceCSV(DEKA_FILE_PATH.getValue(), currentFinance);
                 break;
             case BTC_FILE_PATH:
                 financeService.setPreviousFinanceBTC(currentFinance);
-                financeCSVWriter.appendFinanceCSV(BTC_FILE_PATH.getValue(), currentFinance);
                 break;
         }
+
+        financeCSVWriter.appendFinanceCSV(path.getValue(), currentFinance);
     }
 
     private void handleFirstExecutionWithNoDataInFile(Finance finance, CSVFileProperties path) {
-        LOGGER.info("Inserting first data of " + finance.getDisplayName() + " ...");
+        LOGGER.info("Inserting first data of {}...", finance.getDisplayName());
         finance.setPriceChange(finance.getPrice());
         finance.setDifferencePrice(finance.getPrice());
         finance.setLocalDateChange(String.valueOf(Instant.now().toEpochMilli()));
@@ -129,5 +129,9 @@ public class FinanceServicesTasks {
                 financeService.setPreviousFinanceBTC(finance);
                 break;
         }
+    }
+
+    private boolean checkIfDiffIsToSave(float differencePrice) {
+        return differencePrice < -1f || differencePrice > 1f;
     }
 }
