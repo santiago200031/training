@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Static OpenAPI document of finance model
-  description: Finance resources Open API documentation
+  title: Finance API
+  description: API documentation for finance resources
   version: "1.0"
 
 servers:
@@ -9,18 +9,104 @@ servers:
     description: Optional dev mode server description
 
 paths:
-  /run:
+  /finance/deka:
     get:
       responses:
         200:
-          description: OK - start the timed function
+          description: OK - Get Deka Global Champions finance data
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Finance'
+        204:
+          description: No Content - No finance data available
+
+  /finance/finances:
+    get:
+      responses:
+        200:
+          description: OK - Get list of finances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Finance'
+        204:
+          description: No Content - No finances available
+
+  /financeChart/deka:
+    get:
+      responses:
+        200:
+          description: OK - Get Deka Global Champions finance chart data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceChart'
+        204:
+          description: No Content - No finance chart data available
+
+  /financeChart/finances:
+    get:
+      responses:
+        200:
+          description: OK - Get list of finances (chart)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Finance'
+        204:
+          description: No Content - No finance chart data available
+
 components:
   schemas:
     Finance:
+      type: object
       properties:
-        description:
+        id:
           type: string
-        name:
+        price:
+          type: number
+        priceChange:
+          type: number
+        displayName:
+          type: string
+        timeLastUpdated:
+          type: string
+        differencePrice:
+          type: number
+        localDateChange:
+          type: string
+
+    FinanceChart:
+      type: object
+      properties:
+        series:
+          $ref: '#/components/schemas/Series'
+        pricePreviousClose:
+          type: number
+        priceChange:
+          type: number
+        displayName:
+          type: string
+        timeLastUpdated:
+          type: string
+
+    Series:
+      type: object
+      properties:
+        prices:
+          type: array
+          items:
+            type: number
+        timestamps:
+          type: array
+          items:
+            type: string
+        startTime:
+          type: string
+        endTime:
           type: string
