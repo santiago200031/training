@@ -6,7 +6,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.finance.models.Finance;
 import org.finance.models.FinanceChart;
 import org.finance.services.FinanceChartService;
 import org.finance.services.UserService;
@@ -35,8 +34,8 @@ public class FinanceChartAPI {
 
     @GET
     @Path("/finances")
-    public Response getFinances() throws NoSuchMethodException {
-        List<Finance> finance = financeChartService.getFinances(userService.getActivityId());
+    public Response getFinances() {
+        List<FinanceChart> finance = financeChartService.getFinanceCharts(userService.getActivityId());
         if (finance == null) {
             return Response.noContent().build();
         }

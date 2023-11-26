@@ -3,7 +3,6 @@ package org.finance.services;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.finance.controllers.FinanceChartController;
-import org.finance.models.Finance;
 import org.finance.models.FinanceChart;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class FinanceChartService {
         return financeChartController.getDekaGlobalChampions(activityId);
     }
 
-    public List<Finance> getFinances(UUID activityId) throws NoSuchMethodException {
-        throw new NoSuchMethodException("Implement method");
+    public List<FinanceChart> getFinanceCharts(UUID activityId) {
+        return financeChartController.getFinanceCharts(activityId);
     }
 }
