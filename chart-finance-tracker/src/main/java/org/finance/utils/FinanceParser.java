@@ -20,7 +20,7 @@ public class FinanceParser {
     @Inject
     private Gson gson;
 
-    public String toJson(Finance finance) {
+    public String financeToJson(Finance finance) {
         LOGGER.debug("Parsing Finance Object to JSON: " + finance);
         JsonArray jsonArray0 = new JsonArray();
         JsonArray jsonArray1 = new JsonArray();
@@ -29,7 +29,7 @@ public class FinanceParser {
         return jsonArray0.toString();
     }
 
-    public Finance toFinance(String json) {
+    public Finance jsonToFinance(String json) {
         LOGGER.debug("Parsing String to Finance Object: " + json);
         Type financeType = new TypeToken<List<Finance>>() {
         }.getType();
@@ -37,7 +37,7 @@ public class FinanceParser {
         return finance != null && !finance.isEmpty() ? finance.get(0) : null;
     }
 
-    public List<Finance> toFinanceList(String json) {
+    public List<Finance> jsonToFinanceList(String json) {
         Type financeListType = new TypeToken<List<List<Finance>>>() {
         }.getType();
         List<Finance> financeList = gson.fromJson(json, financeListType);
