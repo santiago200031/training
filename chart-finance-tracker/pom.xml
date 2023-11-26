@@ -14,7 +14,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <quarkus.version>3.2.2.Final</quarkus.version>
         <quarkus-plugin.version>3.2.2.Final</quarkus-plugin.version>
         <quarkus.platform.version>3.2.2.Final</quarkus.platform.version>
     </properties>
@@ -145,7 +144,7 @@
         <dependency>
             <groupId>io.quarkus.resteasy.reactive</groupId>
             <artifactId>resteasy-reactive-jsonb</artifactId>
-            <version>3.2.2.Final</version>
+            <version>${quarkus.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
@@ -211,7 +210,7 @@
             <dependency>
                 <groupId>io.quarkus.resteasy.reactive</groupId>
                 <artifactId>resteasy-reactive-jsonb</artifactId>
-                <version>3.2.2.Final</version>
+                <version>${quarkus.platform.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.quarkus</groupId>
@@ -286,7 +285,7 @@
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-junit5</artifactId>
-                <version>3.2.3.Final</version>
+                <version>${quarkus.platform.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
