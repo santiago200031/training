@@ -1,5 +1,7 @@
 package org.finance.controllers;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.finance.models.Finance;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class FinanceController {
@@ -35,6 +38,7 @@ public class FinanceController {
         try {
             jsonResponse = makeGetRequest(ExternalApiEndpoints.URL_DEKA_FINANCE, activityId);
         } catch (Exception e) {
+            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
         return financeParser.jsonToFinance(jsonResponse);
@@ -79,15 +83,16 @@ public class FinanceController {
                 .readLastFinanceCSV(CSVFileProperties.BTC_FILE_PATH.getValue());
     }
 
-    public boolean isDekaDataEmpty() {
-        return financeCSVReader
-                .readFinanceCSV(CSVFileProperties.DEKA_FILE_PATH.getValue())
-                .isEmpty();
+    public String getFinanceAsJson(Finance finance) {
+        JsonArray jsonArray = financeParser.financeToJson(finance);
+        JsonElement financeAsJsonElement = jsonArray.get(0);
+        return financeAsJsonElement.getAsString();
     }
 
-    public boolean isBTCDataEmpty() {
-        return financeCSVReader
-                .readFinanceCSV(CSVFileProperties.BTC_FILE_PATH.getValue())
-                .isEmpty();
+    public List<String> getFinancesAsJson(List<Finance> finances) {
+        List<JsonElement> jsonArray = financeParser.financeListToJson(finances);
+        return jsonArray.stream()
+                .map(JsonElement::getAsString)
+                .collect(Collectors.toList());
     }
 }

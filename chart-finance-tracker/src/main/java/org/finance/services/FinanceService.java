@@ -34,15 +34,7 @@ public class FinanceService {
         return financeController.getLastDekaFinance();
     }
 
-    public boolean isDekaDataEmpty() {
-        return financeController.isDekaDataEmpty();
-    }
-
-    public boolean isBTCDataEmpty() {
-        return financeController.isBTCDataEmpty();
-    }
-
-    public  Finance getPreviousFinanceDeka() {
+    public Finance getPreviousFinanceDeka() {
         if (this.previousFinanceDeka == null) {
             Finance lastDekaFinance = this.getLastDekaFinance();
             this.setPreviousFinanceDeka(lastDekaFinance);
@@ -55,7 +47,7 @@ public class FinanceService {
         this.previousFinanceDeka = currentFinance;
     }
 
-    public  Finance getPreviousFinanceBTC() {
+    public Finance getPreviousFinanceBTC() {
         if (this.previousFinanceBTC == null) {
             Finance lastBTCFinance = this.getLastBTCFinance();
             this.previousFinanceBTC = lastBTCFinance;
@@ -70,5 +62,13 @@ public class FinanceService {
 
     public void setPreviousFinanceBTC(Finance currentBTC) {
         this.previousFinanceBTC = currentBTC;
+    }
+
+    public String getFinanceAsJson(Finance finance) {
+        return financeController.getFinanceAsJson(finance);
+    }
+
+    public List<String> getFinancesAsJson(List<Finance> finances) {
+        return financeController.getFinancesAsJson(finances);
     }
 }

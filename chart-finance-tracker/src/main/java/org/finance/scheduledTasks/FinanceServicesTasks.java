@@ -94,7 +94,7 @@ public class FinanceServicesTasks {
 
         float differencePrice = getDifferencePriceFunction.apply(currentFinance, previousFinance);
 
-        if (checkIfDiffIsToSave(differencePrice)) {
+        if (checkIfDiffIsToSaveToType(path, differencePrice)) {
             LOGGER.debug("Saving in {}", currentFinance.getDisplayName().trim());
             handleSaveInFile(currentFinance, differencePrice, path);
         }
@@ -102,7 +102,7 @@ public class FinanceServicesTasks {
 
     private void handleSaveInFile(Finance currentFinance, float differencePrice, CSVFileProperties path) {
         currentFinance.setDifferencePrice(differencePrice);
-
+        LOGGER.info("Difference was: {} EUR", differencePrice);
         switch (path) {
             case DEKA_FILE_PATH:
                 financeService.setPreviousFinanceDeka(currentFinance);
@@ -131,7 +131,14 @@ public class FinanceServicesTasks {
         }
     }
 
-    private boolean checkIfDiffIsToSave(float differencePrice) {
-        return differencePrice < -1f || differencePrice > 1f;
+    private boolean checkIfDiffIsToSaveToType(CSVFileProperties path, float differencePrice) {
+        switch (path) {
+            case DEKA_FILE_PATH:
+                return differencePrice < -0.5f || differencePrice > 0.5f;
+            case BTC_FILE_PATH:
+                return differencePrice < -2f || differencePrice > 2f;
+
+        }
+        return false;
     }
 }

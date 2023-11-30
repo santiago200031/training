@@ -6,6 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.finance.models.Finance;
 import org.finance.services.FinanceService;
 import org.finance.services.UserService;
@@ -25,25 +26,31 @@ public class FinanceAPI {
 
     @GET
     @Path("/deka")
-    @Produces
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get the DekaGlobalChampions Finance with the current value")
     public Response getFinanceDekaGlobalChampions() {
         Finance finance = financeService.getDekaGlobalChampions(userService.getActivityId());
         if (finance == null) {
             return Response.noContent().build();
         }
-        return Response.ok(finance).build();
+
+        String financeJson = financeService.getFinanceAsJson(finance);
+        return Response.ok(financeJson).build();
     }
 
     @GET
     @Path("/finances")
-    @Produces
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all the Finances with the current value")
     public Response getFinances() {
         UUID activityId = userService.getActivityId();
-        List<Finance> finance = financeService.getFinances(activityId);
+        List<Finance> finances = financeService.getFinances(activityId);
 
-        if (finance == null) {
+        if (finances == null) {
             return Response.noContent().build();
         }
-        return Response.ok(finance).build();
+
+        List<String> financesJson = financeService.getFinancesAsJson(finances);
+        return Response.ok(financesJson).build();
     }
 }

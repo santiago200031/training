@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class FinanceParser {
@@ -68,22 +69,41 @@ public class FinanceParser {
         try {
             JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
 
-            if (jsonElement.isJsonArray()) {
-                JsonArray jsonArray = jsonElement.getAsJsonArray();
-                Type financeListType = new TypeToken<List<Finance>>() {
-                }.getType();
-                return gson.fromJson(jsonArray, financeListType);
-            } else if (jsonElement.isJsonObject()) {
+            List<Finance> financeList = new ArrayList<>();
 
-                Finance finance = gson.fromJson(jsonElement, Finance.class);
-                List<Finance> financeList = new ArrayList<>();
-                financeList.add(finance);
-                return financeList;
-            }
+            JsonArray jsonArray = jsonElement.getAsJsonArray();
+
+            return parseJsonArray(jsonArray, financeList);
         } catch (JsonParseException e) {
             LOGGER.error("Error parsing JSON to List<Finance> object: " + e.getMessage());
         }
 
         return Collections.emptyList();
+    }
+
+    public List<JsonElement> financeListToJson(List<Finance> finances) {
+        return finances.stream()
+                .map(this::financeToJson)
+                .collect(Collectors.toList());
+    }
+
+    private List<Finance> parseJsonArray(JsonArray jsonArray, List<Finance> financeList) {
+        Type financeType = new TypeToken<Finance>() {
+        }.getType();
+
+        for (JsonElement arrayElement : jsonArray) {
+            if (arrayElement.isJsonArray()) {
+                JsonArray innerArray = arrayElement.getAsJsonArray();
+                for (JsonElement jsonElement : innerArray) {
+
+                    Finance finance = gson.fromJson(jsonElement.getAsJsonObject(), financeType);
+
+                    financeList.add(finance);
+                }
+            } else {
+                LOGGER.error("Expected JSON array inside the outer array.");
+            }
+        }
+        return financeList;
     }
 }

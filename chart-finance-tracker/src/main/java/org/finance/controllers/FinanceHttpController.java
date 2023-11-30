@@ -17,8 +17,7 @@ public class FinanceHttpController {
 
     public String makeHttpRequest(String apiUrl, UUID activityId) {
         String jsonResponse;
-        LOGGER.debug("ActivityId: " + activityId);
-
+        LOGGER.debug("Making a request...");
         try {
             jsonResponse = makeGetRequest(apiUrl, activityId);
         } catch (Exception e) {
@@ -29,7 +28,6 @@ public class FinanceHttpController {
 
     private String makeGetRequest(String apiUrl, UUID activityId) throws Exception {
         String apiUrlWithActId = apiUrl.replace("activity_id", activityId.toString());
-        LOGGER.debug(apiUrlWithActId);
 
         HttpURLConnection connection = openConnection(apiUrlWithActId);
         try {

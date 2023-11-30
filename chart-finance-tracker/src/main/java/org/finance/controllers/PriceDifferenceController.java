@@ -19,20 +19,14 @@ public abstract class PriceDifferenceController {
 
         float difference = currentPrice - previousPrice;
 
-        if (difference > 0f) {
+        if (currentPrice > previousPrice) {
             setGauge(gauge + 1);
 
-            getLogger().info("Price is increasing...");
-            getLogger().info("Increased by " + difference + " EUR");
-
-        } else if (difference < 0f) {
+        } else if (currentPrice < previousPrice) {
             setGauge(gauge - 1);
 
-            getLogger().info("Price is decreasing...");
-            getLogger().info("Decreased by " + difference + " EUR");
-
         }
-        getLogger().debug("Gauge " + getGauge());
+        getLogger().info("Gauge: {} ", getGauge());
         return difference;
     }
 }
