@@ -102,7 +102,7 @@ public class FinanceServicesTasks {
 
     private void handleSaveInFile(Finance currentFinance, float differencePrice, CSVFileProperties path) {
         currentFinance.setDifferencePrice(differencePrice);
-        LOGGER.info("Difference for {} was: {} EUR", currentFinance.getDifferencePrice(), differencePrice);
+        LOGGER.info("Difference for {} was: {} EUR", currentFinance.getDisplayName(), differencePrice);
         switch (path) {
             case DEKA_FILE_PATH:
                 financeService.setPreviousFinanceDeka(currentFinance);
