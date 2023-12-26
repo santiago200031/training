@@ -134,7 +134,7 @@ public class FinanceServicesTasks {
     private boolean checkIfDiffIsToSaveToType(CSVFileProperties path, float differencePrice) {
         switch (path) {
             case DEKA_FILE_PATH:
-                return differencePrice < -0.5f || differencePrice > 0.5f;
+                return differencePrice < -0.2f || differencePrice > 0.2f;
             case BTC_FILE_PATH:
                 return differencePrice < -2f || differencePrice > 2f;
 

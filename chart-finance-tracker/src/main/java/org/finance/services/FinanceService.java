@@ -2,8 +2,10 @@ package org.finance.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.Setter;
 import org.finance.controllers.FinanceController;
 import org.finance.models.Finance;
+import org.finance.models.FinanceOffline;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +16,10 @@ public class FinanceService {
     @Inject
     FinanceController financeController;
 
+    @Setter
     private Finance previousFinanceDeka;
 
+    @Setter
     private Finance previousFinanceBTC;
 
     public Finance getDekaGlobalChampions(UUID activityId) {
@@ -43,10 +47,6 @@ public class FinanceService {
         return this.previousFinanceDeka;
     }
 
-    public void setPreviousFinanceDeka(Finance currentFinance) {
-        this.previousFinanceDeka = currentFinance;
-    }
-
     public Finance getPreviousFinanceBTC() {
         if (this.previousFinanceBTC == null) {
             Finance lastBTCFinance = this.getLastBTCFinance();
@@ -60,15 +60,19 @@ public class FinanceService {
         return financeController.getLastBTCFinance();
     }
 
-    public void setPreviousFinanceBTC(Finance currentBTC) {
-        this.previousFinanceBTC = currentBTC;
-    }
-
     public String getFinanceAsJson(Finance finance) {
         return financeController.getFinanceAsJson(finance);
     }
 
     public List<String> getFinancesAsJson(List<Finance> finances) {
         return financeController.getFinancesAsJson(finances);
+    }
+
+    public FinanceOffline getDekaLocalFinanceAsJson() {
+        return financeController.getDekaGlobalChampionsLocalData();
+    }
+
+    public String getFinanceOfflineAsJson(FinanceOffline financeOffline) {
+        return financeController.getFinanceAsJson(financeOffline);
     }
 }

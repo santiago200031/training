@@ -8,6 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.finance.models.Finance;
+import org.finance.models.FinanceOffline;
 import org.finance.services.FinanceService;
 import org.finance.services.UserService;
 
@@ -51,6 +52,21 @@ public class FinanceAPI {
         }
 
         List<String> financesJson = financeService.getFinancesAsJson(finances);
+        return Response.ok(financesJson).build();
+    }
+
+    @GET
+    @Path("/deka-offline")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all the Finances with the current value")
+    public Response getDekaFinanceLocalData() {
+        FinanceOffline financeOffline = financeService.getDekaLocalFinanceAsJson();
+
+        if (financeOffline == null) {
+            return Response.noContent().build();
+        }
+
+        String financesJson = financeService.getFinanceOfflineAsJson(financeOffline);
         return Response.ok(financesJson).build();
     }
 }

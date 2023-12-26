@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.finance.models.Finance;
+import org.finance.models.FinanceOffline;
 import org.finance.utils.CSVFileProperties;
 import org.finance.utils.FinanceCSVReader;
 import org.finance.utils.FinanceParser;
@@ -89,10 +90,23 @@ public class FinanceController {
         return financeAsJsonElement.getAsString();
     }
 
+    public String getFinanceAsJson(FinanceOffline financeOffline) {
+        JsonArray jsonArray = financeParser.financeToJson(financeOffline);
+        JsonElement financeAsJsonElement = jsonArray.get(0);
+        return financeAsJsonElement.getAsString();
+    }
+
     public List<String> getFinancesAsJson(List<Finance> finances) {
         List<JsonElement> jsonArray = financeParser.financeListToJson(finances);
         return jsonArray.stream()
                 .map(JsonElement::getAsString)
                 .collect(Collectors.toList());
     }
+
+    public FinanceOffline getDekaGlobalChampionsLocalData() {
+        return financeCSVReader
+                .readFinanceCSV(CSVFileProperties.DEKA_FILE_PATH.getValue());
+    }
+
+
 }
