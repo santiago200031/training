@@ -2,6 +2,9 @@ package org.finance.utils;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.finance.models.Finance;
+import org.finance.models.FinanceOffline;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,6 +18,8 @@ import java.util.Scanner;
 
 @ApplicationScoped
 public class FinanceCSVReader {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     public Finance readLastFinanceCSV(String fileName) {
         Finance lastData = null;
@@ -56,30 +61,42 @@ public class FinanceCSVReader {
     }
 
 
-    public List<Finance> readFinanceCSV(String fileName) {
-        List<Finance> dataList = new ArrayList<>();
-
+    public FinanceOffline readFinanceCSV(String fileName) {
+        FinanceOffline financeOffline = null;
         try (BufferedReader fileReader = new BufferedReader(new FileReader(fileName))) {
             fileReader.readLine();
 
+            String displayName;
+            List<Float> prices = new ArrayList<>();
+            List<Float> differencePrices = new ArrayList<>();
+            List<String> pricesChanges = new ArrayList<>();
+            List<String> timesLastUpdated = new ArrayList<>();
+            List<String> localDateChanges = new ArrayList<>();
             String line;
             while ((line = fileReader.readLine()) != null) {
                 try (Scanner rowScanner = new Scanner(line)) {
                     rowScanner.useDelimiter(CSVFileProperties.DELIMITER.getValue());
-                    Finance data = Finance.builder()
-                            .price(Float.parseFloat(rowScanner.next()))
-                            .differencePrice(Float.parseFloat(rowScanner.next()))
-                            .priceChange(Float.parseFloat(rowScanner.next()))
-                            .displayName(rowScanner.next())
-                            .timeLastUpdated(rowScanner.next())
-                            .localDateChange(rowScanner.next())
+
+                    prices.add(Float.parseFloat(rowScanner.next()));
+                    differencePrices.add(Float.parseFloat(rowScanner.next()));
+                    pricesChanges.add(rowScanner.next());
+                    displayName = rowScanner.next();
+                    timesLastUpdated.add(rowScanner.next());
+                    localDateChanges.add(rowScanner.next());
+
+                    financeOffline = FinanceOffline.builder()
+                            .displayName(displayName)
+                            .prices(prices)
+                            .differencePrices(differencePrices)
+                            .timesLastUpdated(timesLastUpdated)
+                            .pricesChanges(pricesChanges)
+                            .localDateChanges(localDateChanges)
                             .build();
-                    dataList.add(data);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
-        return dataList;
+        return financeOffline;
     }
 }

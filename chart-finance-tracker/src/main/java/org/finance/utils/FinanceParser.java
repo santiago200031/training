@@ -1,6 +1,10 @@
 package org.finance.utils;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -22,12 +26,12 @@ public class FinanceParser {
     @Inject
     Gson gson;
 
-    public JsonArray financeToJson(Finance finance) {
-        LOGGER.debug("Parsing Finance Object to JSON: " + finance);
+    public JsonArray financeToJson(Object financeObject) {
+        LOGGER.debug("Parsing Finance Object to JSON: " + financeObject);
         JsonArray jsonArrayToReturn = new JsonArray();
 
         try {
-            String json = gson.toJson(finance);
+            String json = gson.toJson(financeObject);
             JsonArray jsonArray = new JsonArray();
 
             jsonArray.add(json);

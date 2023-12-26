@@ -8,7 +8,8 @@ import org.finance.utils.FinanceChartParser;
 import java.util.List;
 import java.util.UUID;
 
-import static org.finance.utils.ExternalApiEndpoints.*;
+import static org.finance.utils.ExternalApiEndpoints.URL_CHARTS;
+import static org.finance.utils.ExternalApiEndpoints.URL_DEKA_CHARTS;
 
 @ApplicationScoped
 public class FinanceChartController {

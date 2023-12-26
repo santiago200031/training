@@ -1,11 +1,16 @@
 package org.finance;
 
 import org.finance.models.Finance;
+import org.finance.models.FinanceOffline;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.util.List;
 
 public class BaseTest {
 
     protected Finance finance;
+
+    protected FinanceOffline financeOffline;
 
     protected String expectedJson;
 
@@ -16,6 +21,17 @@ public class BaseTest {
         finance = getFinance();
         arrayJson = getArrayJson();
         expectedJson = getExpectedJson();
+        financeOffline = getFinanceOffline();
+    }
+
+    private FinanceOffline getFinanceOffline() {
+        return FinanceOffline.builder()
+                .displayName("Finance Offline Test")
+                .prices(List.of(1f, 2f, 3f))
+                .pricesChanges(List.of("ChangeDate1", "ChangeDate2"))
+                .localDateChanges(List.of("LocalDate1", "LocalDate2"))
+                .differencePrices(List.of(0f, 1f, 1f))
+                .build();
     }
 
     private String getExpectedJson() {
