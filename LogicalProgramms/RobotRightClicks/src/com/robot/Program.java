@@ -1,9 +1,9 @@
-package Main;
+package com.robot;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Main {
+public class Program {
     static Robot rob;
     static int NUMBER_OF_STORIES = 0;
     static int BG_COLOR = -15066598;
