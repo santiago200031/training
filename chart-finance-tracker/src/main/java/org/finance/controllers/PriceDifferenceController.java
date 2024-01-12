@@ -7,24 +7,23 @@ public abstract class PriceDifferenceController {
 
     protected abstract Logger getLogger();
 
-    protected abstract float getGauge();
+    protected abstract int getGauge();
 
-    protected abstract void setGauge(float gauge);
+    protected abstract void setGauge(int gauge);
 
     public float getDifferencePrice(Finance currentFinance, Finance previousFinance) {
-        float gauge = getGauge();
+        int gauge = getGauge();
 
         float currentPrice = currentFinance.getPrice();
         float previousPrice = previousFinance.getPrice();
 
         float difference = currentPrice - previousPrice;
-
-        if (currentPrice > previousPrice) {
+        if (difference > 0) {
             setGauge(gauge + 1);
+        }
 
-        } else if (currentPrice < previousPrice) {
+        if (difference < 0) {
             setGauge(gauge - 1);
-
         }
         getLogger().info("Gauge: {} ", getGauge());
         return difference;

@@ -40,6 +40,20 @@ public class FinanceAPI {
     }
 
     @GET
+    @Path("/btc")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get the Bitcoin Finance with the current value")
+    public Response getFinanceBitcoin() {
+        Finance finance = financeService.getBTC(userService.getActivityId());
+        if (finance == null) {
+            return Response.noContent().build();
+        }
+
+        String financeJson = financeService.getFinanceAsJson(finance);
+        return Response.ok(financeJson).build();
+    }
+
+    @GET
     @Path("/finances")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Get all the Finances with the current value")

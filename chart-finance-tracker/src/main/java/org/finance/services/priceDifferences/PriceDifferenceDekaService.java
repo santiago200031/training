@@ -8,10 +8,15 @@ import org.finance.services.PriceDifferenceService;
 
 @ApplicationScoped
 public class PriceDifferenceDekaService extends PriceDifferenceService {
+
     @Inject
-    PriceDifferenceDekaController priceDifferenceController;
+    private PriceDifferenceDekaController priceDifferenceController;
 
     public float getDifferencePrice(Finance currentDeka, Finance previousDeka) {
         return priceDifferenceController.getDifferencePrice(currentDeka, previousDeka);
+    }
+
+    public int getGauge() {
+        return priceDifferenceController.getGauge();
     }
 }

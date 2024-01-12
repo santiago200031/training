@@ -44,25 +44,27 @@ public class FinanceServicesTasks {
     @Inject
     FinanceCSVWriter financeCSVWriter;
 
-    @Scheduled(every = "25s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "1s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInDekaFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
                 DEKA_FILE_PATH,
                 this.firstStartDeka,
                 financeService::getDekaGlobalChampions,
                 financeService::getPreviousFinanceDeka,
+                financeService::updatePreviousFinanceDeka,
                 priceDifferenceServiceDeka::getDifferencePrice
         );
         this.firstStartDeka = false;
     }
 
-    @Scheduled(every = "10s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "1s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInBTCFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
                 BTC_FILE_PATH,
                 this.firstStartBTC,
                 financeService::getBTC,
                 financeService::getPreviousFinanceBTC,
+                financeService::updatePreviousFinanceBTC,
                 priceDifferenceServiceBTC::getDifferencePrice
         );
         this.firstStartBTC = false;
@@ -73,6 +75,7 @@ public class FinanceServicesTasks {
             boolean isFirstStart,
             Function<UUID, Finance> getCurrentFinance,
             Supplier<Finance> getPreviousFinance,
+            Function<Finance, Finance> updatePreviousFinance,
             BiFunction<Finance, Finance, Float> getDifferencePriceFunction
     ) {
         UUID activityId = userService.getActivityId();
@@ -88,11 +91,11 @@ public class FinanceServicesTasks {
             return;
         }
 
-        if (previousFinance == null) {
-            previousFinance = currentFinance;
-        }
-
         float differencePrice = getDifferencePriceFunction.apply(currentFinance, previousFinance);
+
+        if(differencePrice != 0f){
+            updatePreviousFinance.apply(currentFinance);
+        }
 
         if (checkIfDiffIsToSaveToType(path, differencePrice)) {
             LOGGER.debug("Saving in {}", currentFinance.getDisplayName().trim());
@@ -103,14 +106,6 @@ public class FinanceServicesTasks {
     private void handleSaveInFile(Finance currentFinance, float differencePrice, CSVFileProperties path) {
         currentFinance.setDifferencePrice(differencePrice);
         LOGGER.info("Difference for {} was: {} EUR", currentFinance.getDisplayName(), differencePrice);
-        switch (path) {
-            case DEKA_FILE_PATH:
-                financeService.setPreviousFinanceDeka(currentFinance);
-                break;
-            case BTC_FILE_PATH:
-                financeService.setPreviousFinanceBTC(currentFinance);
-                break;
-        }
 
         financeCSVWriter.appendFinanceCSV(path.getValue(), currentFinance);
     }
@@ -123,10 +118,10 @@ public class FinanceServicesTasks {
         financeCSVWriter.appendFinanceCSV(path.getValue(), finance);
         switch (path) {
             case DEKA_FILE_PATH:
-                financeService.setPreviousFinanceDeka(finance);
+                financeService.updatePreviousFinanceDeka(finance);
                 break;
             case BTC_FILE_PATH:
-                financeService.setPreviousFinanceBTC(finance);
+                financeService.updatePreviousFinanceBTC(finance);
                 break;
         }
     }
