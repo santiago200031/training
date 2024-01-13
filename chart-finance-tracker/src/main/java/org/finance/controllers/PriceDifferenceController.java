@@ -21,11 +21,13 @@ public abstract class PriceDifferenceController {
         if (difference > 0) {
             setGauge(gauge + 1);
         }
-
         if (difference < 0) {
             setGauge(gauge - 1);
         }
-        getLogger().info("Gauge: {} ", getGauge());
+
+        if(gauge != getGauge()){
+            getLogger().info("{} Gauge: {} ", currentFinance.getDisplayName(), getGauge());
+        }
         return difference;
     }
 }
