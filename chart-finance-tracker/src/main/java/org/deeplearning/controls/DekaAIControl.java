@@ -9,7 +9,7 @@ import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
 import org.datavec.api.split.FileSplit;
 import org.deeplearning.configs.NNConfig;
-import org.deeplearning.interfaces.AiModel;
+import org.deeplearning.interfaces.AIModel;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -19,10 +19,10 @@ import java.io.IOException;
 
 
 @ApplicationScoped
-public class DekaAiControl {
+public class DekaAIControl {
 
     @Inject
-    private AiModel aiModel;
+    private AIModel aiModel;
 
     @ConfigProperty(name = "resources.deka")
     private String dekaCsvPath;

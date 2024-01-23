@@ -3,13 +3,13 @@ package org.deeplearning.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.deeplearning.controls.DekaAiControl;
+import org.deeplearning.controls.DekaAIControl;
 
 @ApplicationScoped
-public class DekaAiService {
+public class DekaAIService {
 
     @Inject
-    private DekaAiControl aiControl;
+    private DekaAIControl aiControl;
 
     public void trainModel() {
         aiControl.trainDeka();

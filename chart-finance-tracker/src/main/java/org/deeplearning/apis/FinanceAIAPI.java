@@ -8,15 +8,15 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.deeplearning.services.DekaAiService;
+import org.deeplearning.services.DekaAIService;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/financeai")
-public class FinanceAiAPI {
+public class FinanceAIAPI {
 
     @Inject
-    private DekaAiService aiService;
+    private DekaAIService aiService;
 
     @Path("/trainDeka")
     @GET

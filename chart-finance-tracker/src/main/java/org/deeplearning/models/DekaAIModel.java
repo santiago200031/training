@@ -3,7 +3,7 @@ package org.deeplearning.models;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.deeplearning.configs.NNConfig;
-import org.deeplearning.interfaces.AiModel;
+import org.deeplearning.interfaces.AIModel;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -11,7 +11,7 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 
 @ApplicationScoped
-public class DekaAiModel implements AiModel {
+public class DekaAIModel implements AIModel {
 
     private MultiLayerNetwork networkModel;
 
