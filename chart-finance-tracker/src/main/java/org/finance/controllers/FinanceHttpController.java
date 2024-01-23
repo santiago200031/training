@@ -17,7 +17,6 @@ public class FinanceHttpController {
 
     public String makeHttpRequest(String apiUrl, UUID activityId) {
         String jsonResponse;
-        LOGGER.debug("Making a request...");
         try {
             jsonResponse = makeGetRequest(apiUrl, activityId);
         } catch (Exception e) {

@@ -3,11 +3,9 @@ package org.finance.automation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 
-import java.awt.AWTException;
-import java.awt.Robot;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-
 
 import static org.finance.automation.AutomationRobotBTC.ComponentsCoordinates.BACK_BUTTON;
 

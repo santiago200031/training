@@ -6,3 +6,6 @@ quarkus:
     builder: docker
   native:
     builder-image: quay.io/quarkus/ubi-quarkus-mandrel:21.3-java21
+resources:
+  deka: src/main/resources/financeDeka.csv
+  btc: src/main/resources/financeBTC.csv

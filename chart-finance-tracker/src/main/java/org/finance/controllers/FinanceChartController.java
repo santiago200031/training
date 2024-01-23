@@ -16,6 +16,7 @@ public class FinanceChartController {
 
     @Inject
     FinanceHttpController financeHttpController;
+
     @Inject
     FinanceChartParser financeChartParser;
 

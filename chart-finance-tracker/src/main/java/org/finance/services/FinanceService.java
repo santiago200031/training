@@ -84,6 +84,7 @@ public class FinanceService {
     }
 
     public String getBTCWithRevolut(String credentials, String refreshToken) {
-        return financeController.getBTCRevolut(credentials, refreshToken);
+        return "";
+        //return financeController.getBTCRevolut(credentials, refreshToken);
     }
 }

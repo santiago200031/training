@@ -7,9 +7,9 @@ import jakarta.inject.Inject;
 import org.finance.models.Finance;
 import org.finance.models.FinanceOffline;
 import org.finance.utils.CSVFileProperties;
+import org.finance.utils.ExternalApiEndpoints;
 import org.finance.utils.FinanceCSVReader;
 import org.finance.utils.FinanceParser;
-import org.finance.utils.ExternalApiEndpoints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
