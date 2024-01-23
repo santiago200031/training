@@ -2,7 +2,6 @@ package org.finance.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import lombok.Setter;
 import org.finance.controllers.FinanceController;
 import org.finance.models.Finance;
 import org.finance.models.FinanceOffline;
@@ -14,12 +13,10 @@ import java.util.UUID;
 public class FinanceService {
 
     @Inject
-    FinanceController financeController;
+    private FinanceController financeController;
 
-    @Setter
     private Finance previousFinanceDeka;
 
-    @Setter
     private Finance previousFinanceBTC;
 
     public Finance getDekaGlobalChampions(UUID activityId) {
@@ -41,7 +38,7 @@ public class FinanceService {
     public Finance getPreviousFinanceDeka() {
         if (this.previousFinanceDeka == null) {
             Finance lastDekaFinance = this.getLastDekaFinance();
-            this.setPreviousFinanceDeka(lastDekaFinance);
+            this.updatePreviousFinanceDeka(lastDekaFinance);
             return lastDekaFinance;
         }
         return this.previousFinanceDeka;
@@ -74,5 +71,19 @@ public class FinanceService {
 
     public String getFinanceOfflineAsJson(FinanceOffline financeOffline) {
         return financeController.getFinanceAsJson(financeOffline);
+    }
+
+    public Finance updatePreviousFinanceDeka(Finance currentFinance) {
+        this.previousFinanceDeka = currentFinance;
+        return previousFinanceDeka;
+    }
+
+    public Finance updatePreviousFinanceBTC(Finance currentFinance) {
+        this.previousFinanceBTC = currentFinance;
+        return previousFinanceBTC;
+    }
+
+    public String getBTCWithRevolut(String credentials, String refreshToken) {
+        return financeController.getBTCRevolut(credentials, refreshToken);
     }
 }
