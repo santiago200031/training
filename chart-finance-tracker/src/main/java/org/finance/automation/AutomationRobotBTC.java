@@ -12,10 +12,9 @@ import static org.finance.automation.AutomationRobotBTC.ComponentsCoordinates.BA
 @ApplicationScoped
 public class AutomationRobotBTC implements TradeActions {
 
+    private static final int SMALL_DELAY = 70;
     private final String BTC_TO_BUY = "2";
     private final String BTC_TO_SELL = "0.00009";
-    private static final int SMALL_DELAY = 70;
-
     private Robot robot;
 
     @Override

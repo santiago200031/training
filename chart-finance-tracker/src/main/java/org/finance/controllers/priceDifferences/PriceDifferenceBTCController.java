@@ -11,15 +11,14 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class PriceDifferenceBTCController extends PriceDifferenceController {
 
-    @Inject
-    private AutomationRobotBTC robotBTC;
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     //TODO Move this to application.yaml and get with @ConfigProperty
     private static final boolean HANDLE_BUY_SELL_ACTION = false;
     private static final int DIFFERENCE_TO_PREPARE_HANDLE_ACTION = 30;
     private static final int DIFFERENCE_TO_HANDLE_ACTION = 40;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    @Inject
+    private AutomationRobotBTC robotBTC;
 
     private float previousGauge = 0f;
 

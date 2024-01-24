@@ -1,6 +1,5 @@
 package org.deeplearning.models;
 
-
 import jakarta.enterprise.context.ApplicationScoped;
 import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIModel;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @ApplicationScoped
-public class DekaAIModel implements AIModel {
+public class BTCAIModel implements AIModel {
 
     private MultiLayerNetwork networkModel;
 
@@ -37,6 +36,7 @@ public class DekaAIModel implements AIModel {
         return Double.toString(output.getDouble(0));
     }
 
+    @Override
     public void trainModel(DataSetIterator iterator, MultiLayerConfiguration conf) {
         if (this.networkModel == null) {
             this.networkModel = new MultiLayerNetwork(conf);
@@ -46,12 +46,12 @@ public class DekaAIModel implements AIModel {
         networkModel.init();
         for (int i = 0; i < NNConfig.NUM_EPOCHS; i++) {
             networkModel.fit(iterator);
-            iterator.reset();
         }
+        saveModel("dekaTrainedModel.zip");
     }
 
-    @Override
     public void saveModel(String filePath) {
+
         File file = new File(filePath);
         try {
             ModelSerializer.writeModel(this.networkModel, file, true);

@@ -11,7 +11,7 @@ public class UserService {
     @Inject
     UserController userController;
 
-    public UUID getActivityId(){
+    public UUID getActivityId() {
         return userController.getRandomActivityId();
     }
 }

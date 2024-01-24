@@ -8,7 +8,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.deeplearning.services.BTCAIService;
 import org.deeplearning.services.DekaAIService;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Produces(MediaType.APPLICATION_JSON)
@@ -16,19 +18,44 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 public class FinanceAIAPI {
 
     @Inject
-    private DekaAIService aiService;
+    private DekaAIService dekaAIService;
 
-    @Path("/trainDeka")
+    @Inject
+    private BTCAIService btcAIService;
+
     @GET
+    @Path("/trainDeka")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Train the model with the offline data of the CSV file.")
     public Response trainDeka() {
-        aiService.trainModel();
+        dekaAIService.trainModel();
         return Response.ok("Training successful").build();
     }
 
-    @Path("/predictDeka")
     @POST
-    public Response predict(@RequestBody String input) {
-        String prediction = aiService.makePrediction(input);
+    @Path("/predictDeka")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Make a prediction of the price in some day (dd.mm.yyyy) with the trained model.")
+    public Response predictDeka(@RequestBody String date) {
+        String prediction = dekaAIService.makePrediction(date);
+        return Response.ok(prediction).build();
+    }
+
+    @GET
+    @Path("/trainBtc")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Train the model with the offline data of the CSV file.")
+    public Response trainBTC() {
+        btcAIService.trainModel();
+        return Response.ok("Training successful").build();
+    }
+
+    @POST
+    @Path("/predictBtc")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Make a prediction of the price in some day (dd.mm.yyyy) with the trained model.")
+    public Response predictBTC(@RequestBody String date) {
+        String prediction = btcAIService.makePrediction(date);
         return Response.ok(prediction).build();
     }
 }

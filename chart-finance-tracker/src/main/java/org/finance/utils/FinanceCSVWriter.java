@@ -21,10 +21,10 @@ public class FinanceCSVWriter {
             for (Finance data : dataList) {
                 fileWriter.write(
                         data.getId() + "," +
-                                data.getPrice() + "," +
-                                data.getPriceChange() + "," +
-                                data.getDisplayName() + "," +
-                                data.getTimeLastUpdated()
+                        data.getPrice() + "," +
+                        data.getPriceChange() + "," +
+                        data.getDisplayName() + "," +
+                        data.getTimeLastUpdated()
                 );
                 fileWriter.newLine();
             }
@@ -39,11 +39,11 @@ public class FinanceCSVWriter {
             for (Finance data : dataList) {
                 fileWriter.write(
                         data.getPrice() + "," +
-                                data.getDifferencePrice() + "," +
-                                data.getPriceChange() + "," +
-                                data.getDisplayName() + "," +
-                                data.getTimeLastUpdated() + "," +
-                                Instant.now().toEpochMilli()
+                        data.getDifferencePrice() + "," +
+                        data.getPriceChange() + "," +
+                        data.getDisplayName() + "," +
+                        data.getTimeLastUpdated() + "," +
+                        Instant.now().toEpochMilli()
                 );
             }
 

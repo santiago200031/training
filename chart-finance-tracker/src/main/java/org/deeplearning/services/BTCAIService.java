@@ -1,15 +1,14 @@
 package org.deeplearning.services;
 
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.deeplearning.controls.DekaAIControl;
+import org.deeplearning.controls.BTCAIControl;
 
 @ApplicationScoped
-public class DekaAIService {
+public class BTCAIService {
 
     @Inject
-    private DekaAIControl aiControl;
+    private BTCAIControl aiControl;
 
     public void trainModel() {
         aiControl.train();

@@ -26,25 +26,20 @@ import static org.finance.utils.CSVFileProperties.DEKA_FILE_PATH;
 public class FinanceServicesTasks {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
     private boolean firstStartDeka = true, firstStartBTC = true;
 
     @Inject
     FinanceService financeService;
-
     @Inject
     PriceDifferenceDekaService priceDifferenceServiceDeka;
-
     @Inject
     PriceDifferenceBTCService priceDifferenceServiceBTC;
-
     @Inject
     UserService userService;
-
     @Inject
     FinanceCSVWriter financeCSVWriter;
 
-    @Scheduled(every = "1s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "60s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInDekaFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
                 DEKA_FILE_PATH,
@@ -57,7 +52,7 @@ public class FinanceServicesTasks {
         this.firstStartDeka = false;
     }
 
-    @Scheduled(every = "1s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
+    @Scheduled(every = "17s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInBTCFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
                 BTC_FILE_PATH,
@@ -93,7 +88,7 @@ public class FinanceServicesTasks {
 
         float differencePrice = getDifferencePriceFunction.apply(currentFinance, previousFinance);
 
-        if(differencePrice != 0f){
+        if (differencePrice != 0f) {
             updatePreviousFinance.apply(currentFinance);
         }
 

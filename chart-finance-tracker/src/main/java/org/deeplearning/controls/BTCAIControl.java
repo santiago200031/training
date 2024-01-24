@@ -1,6 +1,5 @@
 package org.deeplearning.controls;
 
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.datavec.api.records.reader.RecordReader;
@@ -9,7 +8,7 @@ import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReade
 import org.datavec.api.split.FileSplit;
 import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIControl;
-import org.deeplearning.models.DekaAIModel;
+import org.deeplearning.models.BTCAIModel;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -20,24 +19,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 @ApplicationScoped
-public class DekaAIControl implements AIControl {
-
+public class BTCAIControl implements AIControl {
     @Inject
-    private DekaAIModel aiModel;
+    private BTCAIModel aiModel;
 
-    @ConfigProperty(name = "resources.deka")
-    private String dekaCsvPath;
+    @ConfigProperty(name = "resources.btc")
+    private String btcCsvFile;
 
     @Override
     public void train() {
-        RecordReader rr = createCsvRecordReader(dekaCsvPath);
+        RecordReader rr = createCsvRecordReader(btcCsvFile);
 
         RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
                 rr, NNConfig.GET_TRANSFORMATION_PROCESS()
         );
-
         DataSetIterator iterator = createDataSetIterator(transformProcessRecordReader);
 
         aiModel.trainModel(iterator, NNConfig.BUILD_NEURONAL_NETWORK_CONF());
@@ -57,7 +53,7 @@ public class DekaAIControl implements AIControl {
         return aiModel.getPrediction(timestamp);
     }
 
-    private RecordReader createCsvRecordReader(String filePath) {
+    public RecordReader createCsvRecordReader(String filePath) {
         CSVRecordReader csvRecordReader = new CSVRecordReader(1, ',');
         try {
             csvRecordReader.initialize(new FileSplit(new File(filePath)));
@@ -68,7 +64,7 @@ public class DekaAIControl implements AIControl {
     }
 
 
-    private DataSetIterator createDataSetIterator(RecordReader recordReader) {
+    public DataSetIterator createDataSetIterator(RecordReader recordReader) {
         return new RecordReaderDataSetIterator(
                 recordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
         );
