@@ -9,14 +9,15 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.learning.config.Sgd;
+import org.nd4j.linalg.learning.config.RmsProp;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 public class NNConfig {
     public static final int LABEL_INDEX = 0;
     public static final int NUM_CLASSES = 1;
-    public static final int NUM_EPOCHS = 120;
-    public static final int BATCH_SIZE = 150;
+    public static final int NUM_EPOCHS = 15000;
+    public static final int BATCH_SIZE = 64;
+    private static final int HIDDEN_LAYERS_NEURONS = 32;
 
     public static Schema GET_SCHEMA() {
         return new Schema.Builder()
@@ -36,22 +37,26 @@ public class NNConfig {
     }
 
     public static MultiLayerConfiguration BUILD_NEURONAL_NETWORK_CONF() {
+
         return new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.XAVIER)
-                .activation(Activation.RELU)
+                .activation(Activation.TANH)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new Sgd(0.05))
+                .updater(new RmsProp(0.001))
+                .l2(0.001)
                 .list()
-                .layer(0, new DenseLayer.Builder().nIn(1).nOut(3).build())
-                .layer(1, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(2, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(3, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(4, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(5, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(6, new DenseLayer.Builder().nIn(3).nOut(3).build())
-                .layer(7, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                .layer(0, new DenseLayer.Builder()
+                        .nIn(1).nOut(HIDDEN_LAYERS_NEURONS)
+                        .build())
+                .layer(1, new DenseLayer.Builder()
+                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .build())
+                .layer(2, new DenseLayer.Builder()
+                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .build())
+                .layer(3, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
-                        .nIn(3).nOut(1).build())
+                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(1).build())
                 .build();
     }
 }
