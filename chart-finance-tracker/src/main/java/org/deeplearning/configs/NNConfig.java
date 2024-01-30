@@ -15,9 +15,9 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 public class NNConfig {
     public static final int LABEL_INDEX = 0;
     public static final int NUM_CLASSES = 1;
-    public static final int NUM_EPOCHS = 15000;
+    public static final int NUM_EPOCHS = 9000;
     public static final int BATCH_SIZE = 64;
-    private static final int HIDDEN_LAYERS_NEURONS = 32;
+    private static final int HIDDEN_LAYERS_NEURONS = 75;
 
     public static Schema GET_SCHEMA() {
         return new Schema.Builder()
@@ -54,7 +54,10 @@ public class NNConfig {
                 .layer(2, new DenseLayer.Builder()
                         .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
                         .build())
-                .layer(3, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
+                .layer(3, new DenseLayer.Builder()
+                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .build())
+                .layer(4, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
                         .nIn(HIDDEN_LAYERS_NEURONS).nOut(1).build())
                 .build();
