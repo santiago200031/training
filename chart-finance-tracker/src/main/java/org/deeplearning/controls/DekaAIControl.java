@@ -10,6 +10,7 @@ import org.datavec.api.split.FileSplit;
 import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIControl;
 import org.deeplearning.models.DekaAIModel;
+import org.deeplearning.plots.PlotFinance;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -32,15 +33,13 @@ public class DekaAIControl implements AIControl {
 
     @Override
     public void train() {
-        RecordReader rr = createCsvRecordReader(dekaCsvPath);
+        DataSetIterator iterator = loadCsvData(dekaCsvPath);
+        aiModel.trainModel(iterator);
+    }
 
-        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
-                rr, NNConfig.GET_TRANSFORMATION_PROCESS()
-        );
-
-        DataSetIterator iterator = createDataSetIterator(transformProcessRecordReader);
-
-        aiModel.trainModel(iterator, NNConfig.BUILD_NEURONAL_NETWORK_CONF());
+    public void trainBestModel() {
+        DataSetIterator iterator = loadCsvData(dekaCsvPath);
+        aiModel.saveModelAndStop(iterator);
     }
 
     @Override
@@ -57,6 +56,25 @@ public class DekaAIControl implements AIControl {
         return aiModel.getPrediction(timestamp);
     }
 
+    @Override
+    public DataSetIterator loadCsvData(String filePath) {
+        RecordReader recordReader = createCsvRecordReader(dekaCsvPath);
+
+        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
+                recordReader, NNConfig.GET_TRANSFORMATION_PROCESS()
+        );
+
+        return new RecordReaderDataSetIterator(
+                transformProcessRecordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
+        );
+    }
+
+    @Override
+    public PlotFinance visualizeData() {
+        DataSetIterator iterator = loadCsvData(dekaCsvPath);
+        return aiModel.visualizeData(iterator);
+    }
+
     private RecordReader createCsvRecordReader(String filePath) {
         CSVRecordReader csvRecordReader = new CSVRecordReader(1, ',');
         try {
@@ -65,12 +83,5 @@ public class DekaAIControl implements AIControl {
             throw new RuntimeException("Error initializing CSVRecordReader", e);
         }
         return csvRecordReader;
-    }
-
-
-    private DataSetIterator createDataSetIterator(RecordReader recordReader) {
-        return new RecordReaderDataSetIterator(
-                recordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
-        );
     }
 }

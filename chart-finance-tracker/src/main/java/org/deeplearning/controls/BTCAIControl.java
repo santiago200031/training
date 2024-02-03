@@ -2,6 +2,7 @@ package org.deeplearning.controls;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.apache.commons.lang3.NotImplementedException;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -9,6 +10,7 @@ import org.datavec.api.split.FileSplit;
 import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIControl;
 import org.deeplearning.models.BTCAIModel;
+import org.deeplearning.plots.PlotFinance;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
@@ -29,14 +31,8 @@ public class BTCAIControl implements AIControl {
 
     @Override
     public void train() {
-        RecordReader rr = createCsvRecordReader(btcCsvFile);
-
-        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
-                rr, NNConfig.GET_TRANSFORMATION_PROCESS()
-        );
-        DataSetIterator iterator = createDataSetIterator(transformProcessRecordReader);
-
-        aiModel.trainModel(iterator, NNConfig.BUILD_NEURONAL_NETWORK_CONF());
+        DataSetIterator dataSetIterator = loadCsvData(btcCsvFile);
+        aiModel.trainModel(dataSetIterator);
     }
 
     @Override
@@ -49,8 +45,28 @@ public class BTCAIControl implements AIControl {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
         long timestamp = parsedDate.getTime();
+
         return aiModel.getPrediction(timestamp);
+    }
+
+    @Override
+    public DataSetIterator loadCsvData(String filePath) {
+        RecordReader recordReader = createCsvRecordReader(btcCsvFile);
+
+        RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
+                recordReader, NNConfig.GET_TRANSFORMATION_PROCESS()
+        );
+
+        return new RecordReaderDataSetIterator(
+                transformProcessRecordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
+        );
+    }
+
+    @Override
+    public PlotFinance visualizeData() {
+        throw new NotImplementedException("Method no implemented");
     }
 
     public RecordReader createCsvRecordReader(String filePath) {
@@ -61,12 +77,5 @@ public class BTCAIControl implements AIControl {
             throw new RuntimeException("Error initializing CSVRecordReader", e);
         }
         return csvRecordReader;
-    }
-
-
-    public DataSetIterator createDataSetIterator(RecordReader recordReader) {
-        return new RecordReaderDataSetIterator(
-                recordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
-        );
     }
 }

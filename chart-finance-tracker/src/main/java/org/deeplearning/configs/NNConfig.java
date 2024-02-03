@@ -37,13 +37,12 @@ public class NNConfig {
     }
 
     public static MultiLayerConfiguration BUILD_NEURONAL_NETWORK_CONF() {
-
         return new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.TANH)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new RmsProp(0.001))
-                .l2(0.001)
+                .updater(new RmsProp(0.000995))
+                .l2(0.0000009)
                 .list()
                 .layer(0, new DenseLayer.Builder()
                         .nIn(1).nOut(HIDDEN_LAYERS_NEURONS)

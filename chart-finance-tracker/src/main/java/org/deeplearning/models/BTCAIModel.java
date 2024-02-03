@@ -3,7 +3,6 @@ package org.deeplearning.models;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIModel;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.deeplearning4j.util.ModelSerializer;
@@ -37,9 +36,9 @@ public class BTCAIModel implements AIModel {
     }
 
     @Override
-    public void trainModel(DataSetIterator iterator, MultiLayerConfiguration conf) {
+    public void trainModel(DataSetIterator iterator) {
         if (this.networkModel == null) {
-            this.networkModel = new MultiLayerNetwork(conf);
+            this.networkModel = new MultiLayerNetwork(NNConfig.BUILD_NEURONAL_NETWORK_CONF());
         }
 
         networkModel.setListeners(List.of(new ScoreIterationListener(100)));
@@ -47,7 +46,7 @@ public class BTCAIModel implements AIModel {
         for (int i = 0; i < NNConfig.NUM_EPOCHS; i++) {
             networkModel.fit(iterator);
         }
-        saveModel("dekaTrainedModel.zip");
+        saveModel("btcAIModel.zip");
     }
 
     public void saveModel(String filePath) {

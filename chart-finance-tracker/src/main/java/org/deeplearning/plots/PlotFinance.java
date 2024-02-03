@@ -1,0 +1,77 @@
+package org.deeplearning.plots;
+
+import org.deeplearning.exceptions.SaveChartException;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.Range;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.ui.ApplicationFrame;
+
+import java.io.File;
+import java.io.IOException;
+
+public class PlotFinance extends ApplicationFrame {
+
+    private static final String ACTUAL_SERIES_LABEL = "Actual";
+    private static final String PREDICTED_SERIES_LABEL = "Predicted";
+    private static final int DAY = 1;
+    private static final int MONTH = 6;
+    private static final int YEAR = 2023;
+    private static final String CHART_TITLE = "Data vs Predictions";
+    private static final String DOMAIN_LABEL = "Date";
+    private static final String RANGE_LABEL = "Price";
+    private static final int RANGE_AXIS_LOWER_BOUND = 200;
+    private static final int RANGE_AXIS_UPPER_BOUND = 500;
+    private static final int CHART_PANEL_WIDTH = 700;
+    private static final int CHART_PANEL_HEIGHT = 700;
+    private static final int SAVED_CHART_WIDTH = 900;
+    private static final int SAVED_CHART_HEIGHT = 900;
+    private final JFreeChart chart;
+
+    public PlotFinance(String title, double[] actual, double[] predicted) {
+        super(title);
+        final TimeSeries series1 = new TimeSeries(ACTUAL_SERIES_LABEL);
+        for (int i = 0; i < actual.length; i++) {
+            series1.add(new Day(i + DAY, MONTH, YEAR), actual[i]);
+        }
+
+        final TimeSeries series2 = new TimeSeries(PREDICTED_SERIES_LABEL);
+        for (int i = 0; i < predicted.length; i++) {
+            series2.add(new Day(i + DAY, MONTH, YEAR), predicted[i]);
+        }
+
+        final TimeSeriesCollection data = new TimeSeriesCollection();
+        data.addSeries(series1);
+        data.addSeries(series2);
+
+        this.chart = ChartFactory.createTimeSeriesChart(
+                CHART_TITLE,
+                DOMAIN_LABEL,
+                RANGE_LABEL,
+                data,
+                true,
+                true,
+                false
+        );
+
+        final XYPlot plot = chart.getXYPlot();
+        plot.getRangeAxis().setRange(new Range(RANGE_AXIS_LOWER_BOUND, RANGE_AXIS_UPPER_BOUND));
+
+        final ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(CHART_PANEL_WIDTH, CHART_PANEL_HEIGHT));
+        setContentPane(chartPanel);
+    }
+
+    public void saveChart(String filePath) throws SaveChartException {
+        try {
+            ChartUtilities.saveChartAsPNG(new File(filePath), this.chart, SAVED_CHART_WIDTH, SAVED_CHART_HEIGHT);
+        } catch (IOException e) {
+            throw new SaveChartException(e, filePath);
+        }
+    }
+}
