@@ -20,9 +20,9 @@ public class BTCAIModel implements AIModel {
     private MultiLayerNetwork networkModel;
 
     @Override
-    public String getPrediction(long timestamp) {
+    public double getPrediction(long timestamp) {
         if (networkModel == null) {
-            return "Model not initialized";
+            return 0.0;
         }
 
         double timestampDouble = (double) timestamp;
@@ -32,7 +32,7 @@ public class BTCAIModel implements AIModel {
         );
 
         INDArray output = networkModel.output(inputArray);
-        return Double.toString(output.getDouble(0));
+        return output.getDouble(0);
     }
 
     @Override

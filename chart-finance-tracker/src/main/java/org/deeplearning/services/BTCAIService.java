@@ -3,6 +3,7 @@ package org.deeplearning.services;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.deeplearning.controls.BTCAIControl;
+import org.finance.models.Finance;
 
 @ApplicationScoped
 public class BTCAIService {
@@ -14,7 +15,7 @@ public class BTCAIService {
         aiControl.train();
     }
 
-    public String makePrediction(String dateString) {
+    public Finance makePrediction(String dateString) {
         return aiControl.makePrediction(dateString);
     }
 }

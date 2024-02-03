@@ -44,7 +44,7 @@ public class DekaAIModel implements AIModel {
     private MultiLayerNetwork networkModel;
 
     @Override
-    public String getPrediction(long timestamp) {
+    public double getPrediction(long timestamp) {
         loadAndSetModelFromPath(AIModelFile);
 
         double timestampDouble = (double) timestamp;
@@ -54,7 +54,7 @@ public class DekaAIModel implements AIModel {
         );
 
         INDArray output = networkModel.output(inputArray);
-        return Double.toString(output.getDouble(0));
+        return output.getDouble(0);
     }
 
 

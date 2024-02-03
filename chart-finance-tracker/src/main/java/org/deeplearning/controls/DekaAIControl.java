@@ -13,6 +13,7 @@ import org.deeplearning.models.DekaAIModel;
 import org.deeplearning.plots.PlotFinance;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.finance.models.Finance;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class DekaAIControl implements AIControl {
     }
 
     @Override
-    public String makePrediction(String dateString) {
+    public Finance makePrediction(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
         Date parsedDate;
@@ -53,7 +54,13 @@ public class DekaAIControl implements AIControl {
             throw new RuntimeException(e);
         }
         long timestamp = parsedDate.getTime();
-        return aiModel.getPrediction(timestamp);
+        double prediction = aiModel.getPrediction(timestamp);
+
+        return Finance.builder()
+                .displayName("Predicted Deka")
+                .timeLastUpdated(dateString)
+                .price((float) prediction)
+                .build();
     }
 
     @Override

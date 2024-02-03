@@ -12,6 +12,8 @@ import org.deeplearning.services.BTCAIService;
 import org.deeplearning.services.DekaAIService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.finance.models.Finance;
+import org.finance.services.FinanceService;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/financeai")
@@ -23,13 +25,16 @@ public class FinanceAIAPI {
     @Inject
     private BTCAIService btcAIService;
 
+    @Inject
+    private FinanceService financeService;
+
     @GET
     @Path("/trainDeka")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Train the model with the offline data of the CSV file.")
     public Response trainDeka() {
         dekaAIService.trainModel();
-        return Response.ok("Training successful").build();
+        return Response.ok("{\nTraining successful\n}").build();
     }
 
     @POST
@@ -37,8 +42,14 @@ public class FinanceAIAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Make a prediction of the price in some day (dd.mm.yyyy) with the trained model.")
     public Response predictDeka(@RequestBody String date) {
-        String prediction = dekaAIService.makePrediction(date);
-        return Response.ok(prediction).build();
+        Finance finance = dekaAIService.makePrediction(date);
+
+        if (finance == null) {
+            return Response.noContent().build();
+        }
+
+        String financeJson = financeService.getFinanceAsJson(finance);
+        return Response.ok(financeJson).build();
     }
 
     @GET
@@ -47,7 +58,7 @@ public class FinanceAIAPI {
     @Operation(summary = "Train the model with the offline data of the CSV file.")
     public Response trainBTC() {
         btcAIService.trainModel();
-        return Response.ok("Training successful").build();
+        return Response.ok("{\nTraining successful\n}").build();
     }
 
     @POST
@@ -55,7 +66,13 @@ public class FinanceAIAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Make a prediction of the price in some day (dd.mm.yyyy) with the trained model.")
     public Response predictBTC(@RequestBody String date) {
-        String prediction = btcAIService.makePrediction(date);
-        return Response.ok(prediction).build();
+        Finance finance = btcAIService.makePrediction(date);
+
+        if (finance == null) {
+            return Response.noContent().build();
+        }
+
+        String financeJson = financeService.getFinanceAsJson(finance);
+        return Response.ok(financeJson).build();
     }
 }

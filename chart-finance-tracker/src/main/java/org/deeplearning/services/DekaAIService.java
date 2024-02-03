@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.deeplearning.controls.DekaAIControl;
 import org.deeplearning.plots.PlotFinance;
+import org.finance.models.Finance;
 
 @ApplicationScoped
 public class DekaAIService {
@@ -20,7 +21,7 @@ public class DekaAIService {
         aiControl.trainBestModel();
     }
 
-    public String makePrediction(String dateString) {
+    public Finance makePrediction(String dateString) {
         return aiControl.makePrediction(dateString);
     }
 
