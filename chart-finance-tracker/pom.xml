@@ -15,6 +15,7 @@
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <quarkus-plugin.version>3.2.2.Final</quarkus-plugin.version>
         <quarkus.platform.version>3.2.2.Final</quarkus.platform.version>
+        <dl4j.version>1.0.0-M2.1</dl4j.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -369,35 +370,37 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-test-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-core</artifactId>
-            <version>1.0.0-M2.1</version>
+            <version>${dl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>1.0.0-M2.1</version>
+            <version>${dl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.datavec</groupId>
             <artifactId>datavec-api</artifactId>
-            <version>1.0.0-M2.1</version>
+            <version>${dl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-datavec-iterators</artifactId>
-            <version>1.0.0-M2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.13</version>
+            <version>${dl4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-nn</artifactId>
-            <version>1.0.0-M2.1</version>
+            <version>${dl4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.13</version>
         </dependency>
     </dependencies>
     <build>
