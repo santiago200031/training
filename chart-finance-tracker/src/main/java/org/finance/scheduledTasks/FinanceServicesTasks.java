@@ -26,7 +26,6 @@ import static org.finance.utils.CSVFileProperties.DEKA_FILE_PATH;
 public class FinanceServicesTasks {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private boolean firstStartDeka = true, firstStartBTC = true;
 
     @Inject
     FinanceService financeService;
@@ -38,6 +37,8 @@ public class FinanceServicesTasks {
     UserService userService;
     @Inject
     FinanceCSVWriter financeCSVWriter;
+
+    private boolean firstStartDeka = true, firstStartBTC = true;
 
     @Scheduled(every = "60s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInDekaFileIfPriceHasChanged() {

@@ -1,5 +1,7 @@
 package org.deeplearning.configs;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.Getter;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
@@ -8,16 +10,32 @@ import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.learning.config.RmsProp;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
+@ApplicationScoped
+@Getter
 public class NNConfig {
-    public static final int LABEL_INDEX = 0;
-    public static final int NUM_CLASSES = 1;
-    public static final int NUM_EPOCHS = 9000;
-    public static final int BATCH_SIZE = 64;
-    private static final int HIDDEN_LAYERS_NEURONS = 75;
+    @ConfigProperty(name = "resources.ai.neural-network.label-index")
+    private int labelIndex;
+    @ConfigProperty(name = "resources.ai.neural-network.learning-rate")
+    private double learningRate;
+    @ConfigProperty(name = "resources.ai.neural-network.regularizationL2")
+    private double regularizationL2;
+    @ConfigProperty(name = "resources.ai.neural-network.num-classes")
+    private int numClasses;
+    @ConfigProperty(name = "resources.ai.neural-network.num-in")
+    private int numIn;
+    @ConfigProperty(name = "resources.ai.neural-network.num-out")
+    private int numOut;
+    @ConfigProperty(name = "resources.ai.neural-network.num-epochs")
+    private int numEpochs;
+    @ConfigProperty(name = "resources.ai.neural-network.batch-size")
+    private int batchSize;
+    @ConfigProperty(name = "resources.ai.neural-network.hidden-layers-neurons")
+    private int hiddenLayersNeurons;
 
     public static Schema GET_SCHEMA() {
         return new Schema.Builder()
@@ -36,29 +54,30 @@ public class NNConfig {
                 .build();
     }
 
-    public static MultiLayerConfiguration BUILD_NEURONAL_NETWORK_CONF() {
+    public MultiLayerConfiguration buildNeuronalNetworkConfig() {
         return new NeuralNetConfiguration.Builder()
                 .weightInit(WeightInit.XAVIER)
-                .activation(Activation.TANH)
+                .activation(Activation.LEAKYRELU)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .updater(new RmsProp(0.000995))
-                .l2(0.0000009)
+                .updater(new Adam(learningRate))
+                .l2(regularizationL2)
                 .list()
+
                 .layer(0, new DenseLayer.Builder()
-                        .nIn(1).nOut(HIDDEN_LAYERS_NEURONS)
+                        .nIn(numIn).nOut(hiddenLayersNeurons)
                         .build())
                 .layer(1, new DenseLayer.Builder()
-                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .nIn(hiddenLayersNeurons).nOut(hiddenLayersNeurons)
                         .build())
                 .layer(2, new DenseLayer.Builder()
-                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .nIn(hiddenLayersNeurons).nOut(hiddenLayersNeurons)
                         .build())
                 .layer(3, new DenseLayer.Builder()
-                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(HIDDEN_LAYERS_NEURONS)
+                        .nIn(hiddenLayersNeurons).nOut(hiddenLayersNeurons)
                         .build())
                 .layer(4, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                         .activation(Activation.IDENTITY)
-                        .nIn(HIDDEN_LAYERS_NEURONS).nOut(1).build())
+                        .nIn(hiddenLayersNeurons).nOut(numOut).build())
                 .build();
     }
 }

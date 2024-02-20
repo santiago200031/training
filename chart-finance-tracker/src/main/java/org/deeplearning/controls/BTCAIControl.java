@@ -2,7 +2,9 @@ package org.deeplearning.controls;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.fitting.PolynomialCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReader;
@@ -11,69 +13,150 @@ import org.deeplearning.configs.NNConfig;
 import org.deeplearning.interfaces.AIControl;
 import org.deeplearning.models.BTCAIModel;
 import org.deeplearning.plots.PlotFinance;
+import org.deeplearning.utils.AICommons;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.finance.models.Finance;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @ApplicationScoped
 public class BTCAIControl implements AIControl {
+
     @Inject
     private BTCAIModel aiModel;
 
-    @ConfigProperty(name = "resources.btc")
-    private String btcCsvFile;
+    @Inject
+    private NNConfig nnConfig;
+
+    @Inject
+    private AICommons aiCommons;
+
+    @ConfigProperty(name = "resources.btc.csv-file")
+    private String csvFile;
+
+    @ConfigProperty(name = "resources.ai.regression.degree")
+    private int degree;
+
+    @ConfigProperty(name = "resources.btc.regression.function-file")
+    private String functionFile;
+
+    @ConfigProperty(name = "resources.btc.regression.chart-file")
+    private String polynomialFunctionChartNameFile;
+
+    private PolynomialFunction function;
 
     @Override
-    public void train() {
-        DataSetIterator dataSetIterator = loadCsvData(btcCsvFile);
-        aiModel.trainModel(dataSetIterator);
+    public void trainNeuralNetwork() {
+        DataSetIterator dataSetIterator = loadCsvData(csvFile);
+        aiModel.trainNeuralNetwork(dataSetIterator);
     }
 
     @Override
-    public Finance makePrediction(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    public void trainBestNeuralNetwork() {
+        DataSetIterator iterator = loadCsvData(csvFile);
+        aiModel.saveModelAndStop(iterator);
+    }
 
-        Date parsedDate;
-        try {
-            parsedDate = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
 
-        long timestamp = parsedDate.getTime();
-
-        double prediction = aiModel.getPrediction(timestamp);
+    @Override
+    public Finance predictWithNeuralNetwork(String dateString) {
+        long timestamp = aiCommons.getTimeStampFromDate(dateString);
+        double prediction = aiModel.predictWithNeuralNetwork(timestamp);
 
         return Finance.builder()
-                .displayName("BTC Predicted")
-                .localDateChange(dateString)
+                .displayName("Predicted BTC")
+                .timeLastUpdated(dateString)
+                .price((float) prediction)
+                .build();
+    }
+
+    @Override
+    public PolynomialFunction calculatePolynomialFunction() {
+        DataSetIterator iterator = loadCsvData(csvFile);
+        WeightedObservedPoints obs = new WeightedObservedPoints();
+        while (iterator.hasNext()) {
+            DataSet dataSet = iterator.next();
+            INDArray features = dataSet.getFeatures();
+            INDArray labels = dataSet.getLabels();
+
+            for (int i = 0; i < features.length(); i++) {
+                obs.add(features.getDouble(i), labels.getDouble(i));
+            }
+        }
+
+        PolynomialCurveFitter fitter = PolynomialCurveFitter.create(degree);
+        function = new PolynomialFunction(fitter.fit(obs.toList()));
+
+        savePolynomialFunction(function);
+        return function;
+    }
+
+    @Override
+    public Finance predictWithPolynomialRegressionModel(String dateString) {
+        if (function == null) {
+            function = loadPolynomialFunction();
+        }
+
+        if (function == null) {
+            function = calculatePolynomialFunction();
+        }
+
+        long timestamp = aiCommons.getTimeStampFromDate(dateString);
+        double prediction = function.value(timestamp);
+
+        return Finance.builder()
+                .displayName("Predicted BTC")
+                .timeLastUpdated(dateString)
                 .price((float) prediction)
                 .build();
     }
 
     @Override
     public DataSetIterator loadCsvData(String filePath) {
-        RecordReader recordReader = createCsvRecordReader(btcCsvFile);
+        RecordReader recordReader = createCsvRecordReader(csvFile);
 
         RecordReader transformProcessRecordReader = new TransformProcessRecordReader(
                 recordReader, NNConfig.GET_TRANSFORMATION_PROCESS()
         );
 
         return new RecordReaderDataSetIterator(
-                transformProcessRecordReader, NNConfig.BATCH_SIZE, NNConfig.LABEL_INDEX, NNConfig.NUM_CLASSES
+                transformProcessRecordReader, nnConfig.getBatchSize(), nnConfig.getLabelIndex(), nnConfig.getNumClasses()
         );
     }
 
     @Override
-    public PlotFinance visualizeData() {
-        throw new NotImplementedException("Method no implemented");
+    public PlotFinance visualizeModel() {
+        DataSetIterator iterator = loadCsvData(csvFile);
+        return aiModel.visualizeData(iterator);
+    }
+
+    @Override
+    public PlotFinance visualizeRegressionFunction() {
+        DataSetIterator dataSetIterator = loadCsvData(csvFile);
+        if (function == null) {
+            function = loadPolynomialFunction();
+        }
+        return aiModel.visualizeData(dataSetIterator, function);
+    }
+
+    @Override
+    public void savePolynomialFunction(PolynomialFunction function) {
+        try {
+            aiCommons.savePolynomialFunction(function, functionFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public PolynomialFunction loadPolynomialFunction() {
+        // TODO
+        return null;
     }
 
     public RecordReader createCsvRecordReader(String filePath) {

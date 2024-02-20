@@ -13,7 +13,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
-        <quarkus-plugin.version>3.2.2.Final</quarkus-plugin.version>
+        <quarkus.plugin.version>3.2.2.Final</quarkus.plugin.version>
         <quarkus.platform.version>3.2.2.Final</quarkus.platform.version>
         <dl4j.version>1.0.0-M2.1</dl4j.version>
     </properties>
@@ -199,9 +199,14 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.5.2</version>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
-            <version>${quarkus-plugin.version}</version>
+            <version>${quarkus.plugin.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -292,6 +297,12 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <version>${quarkus.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.1.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -416,7 +427,7 @@
             <plugin>
                 <groupId>io.quarkus.platform</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${quarkus-plugin.version}</version>
+                <version>${quarkus.plugin.version}</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>

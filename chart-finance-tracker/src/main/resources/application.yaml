@@ -6,6 +6,54 @@ quarkus:
     builder: docker
   native:
     builder-image: quay.io/quarkus/ubi-quarkus-mandrel:21.3-java21
+
 resources:
-  deka: src/main/resources/financeDeka.csv
-  btc: src/main/resources/financeBTC.csv
+  ai:
+    neural-network:
+      evaluate-every-n-epochs: 150
+      log-every-n-epochs: 300
+
+      label-index: 0
+      learning-rate: 0.001
+      regularizationL2: 0.0001
+      num-classes: 1
+      num-in: 3
+      num-out: 1
+      num-epochs: 10000
+      batch-size: 64
+      hidden-layers-neurons: 75
+
+    regression:
+      degree: 3
+
+  deka:
+    # Data
+    csv-file: src/main/resources/deka/financeDeka.csv
+
+    # Model Files
+    neural-network:
+      model: src/main/resources/deka/AIModelDeka.bin
+      best-model: src/main/resources/deka/bestModelDeka.bin
+      # Data Chart
+      chart-file: src/main/resources/deka/AIModelTrainedDeka.png
+
+    regression:
+      function-file: src/main/resources/deka/regressionDeka.ser
+      # Data Chart
+      chart-file: src/main/resources/deka/regressionFunctionDeka.png
+
+  btc:
+    # Data
+    csv-file: src/main/resources/btc/financeBTC.csv
+
+    # Model Files
+    neural-network:
+      model: src/main/resources/btc/AIModelBTC.bin
+      best-model: src/main/resources/btc/bestModelBTC.bin
+      # Data Chart
+      chart-file: src/main/resources/btc/AIModelTrainedBTC.png
+
+    regression:
+      function-file: src/main/resources/btc/regressionBTC.ser
+      # Data Chart
+      chart-file: src/main/resources/btc/regressionFunctionBTC.png
