@@ -3,12 +3,12 @@ package org.finance.scheduledTasks;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.finance.models.Finance;
 import org.finance.services.FinanceService;
 import org.finance.services.UserService;
 import org.finance.services.priceDifferences.PriceDifferenceBTCService;
 import org.finance.services.priceDifferences.PriceDifferenceDekaService;
-import org.finance.utils.CSVFileProperties;
 import org.finance.utils.FinanceCSVWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +19,16 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.finance.utils.CSVFileProperties.BTC_FILE_PATH;
-import static org.finance.utils.CSVFileProperties.DEKA_FILE_PATH;
-
 @ApplicationScoped
 public class FinanceServicesTasks {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    @ConfigProperty(name = "resources.deka.csv-file")
+    private String dekaCsvFile;
+
+    @ConfigProperty(name = "resources.btc.csv-file")
+    private String btcCsvFile;
 
     @Inject
     FinanceService financeService;
@@ -43,7 +46,7 @@ public class FinanceServicesTasks {
     @Scheduled(every = "60s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInDekaFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
-                DEKA_FILE_PATH,
+                dekaCsvFile,
                 this.firstStartDeka,
                 financeService::getDekaGlobalChampions,
                 financeService::getPreviousFinanceDeka,
@@ -56,7 +59,7 @@ public class FinanceServicesTasks {
     @Scheduled(every = "17s", concurrentExecution = Scheduled.ConcurrentExecution.SKIP)
     public void saveInBTCFileIfPriceHasChanged() {
         saveInFileIfPriceHasChanged(
-                BTC_FILE_PATH,
+                btcCsvFile,
                 this.firstStartBTC,
                 financeService::getBTC,
                 financeService::getPreviousFinanceBTC,
@@ -67,7 +70,7 @@ public class FinanceServicesTasks {
     }
 
     private void saveInFileIfPriceHasChanged(
-            CSVFileProperties path,
+            String path,
             boolean isFirstStart,
             Function<UUID, Finance> getCurrentFinance,
             Supplier<Finance> getPreviousFinance,
@@ -99,37 +102,40 @@ public class FinanceServicesTasks {
         }
     }
 
-    private void handleSaveInFile(Finance currentFinance, float differencePrice, CSVFileProperties path) {
+    private void handleSaveInFile(Finance currentFinance, float differencePrice, String path) {
         currentFinance.setDifferencePrice(differencePrice);
         LOGGER.info("Difference for {} was: {} EUR", currentFinance.getDisplayName(), differencePrice);
 
-        financeCSVWriter.appendFinanceCSV(path.getValue(), currentFinance);
+        financeCSVWriter.appendFinanceCSV(path, currentFinance);
     }
 
-    private void handleFirstExecutionWithNoDataInFile(Finance finance, CSVFileProperties path) {
+    private void handleFirstExecutionWithNoDataInFile(Finance finance, String path) {
         LOGGER.info("Inserting first data of {}...", finance.getDisplayName());
         finance.setPriceChange(finance.getPrice());
         finance.setDifferencePrice(finance.getPrice());
         finance.setLocalDateChange(String.valueOf(Instant.now().toEpochMilli()));
-        financeCSVWriter.appendFinanceCSV(path.getValue(), finance);
-        switch (path) {
-            case DEKA_FILE_PATH:
-                financeService.updatePreviousFinanceDeka(finance);
-                break;
-            case BTC_FILE_PATH:
-                financeService.updatePreviousFinanceBTC(finance);
-                break;
+        financeCSVWriter.appendFinanceCSV(path, finance);
+
+        if (path.equals(dekaCsvFile)) {
+            financeService.updatePreviousFinanceDeka(finance);
+            return;
+        }
+
+        if (path.equals(btcCsvFile)) {
+            financeService.updatePreviousFinanceBTC(finance);
+            return;
         }
     }
 
-    private boolean checkIfDiffIsToSaveToType(CSVFileProperties path, float differencePrice) {
-        switch (path) {
-            case DEKA_FILE_PATH:
-                return differencePrice < -0.2f || differencePrice > 0.2f;
-            case BTC_FILE_PATH:
-                return differencePrice < -2f || differencePrice > 2f;
-
+    private boolean checkIfDiffIsToSaveToType(String path, float differencePrice) {
+        if (path.equals(dekaCsvFile)) {
+            return differencePrice < -0.2f || differencePrice > 0.2f;
         }
+
+        if (path.equals(btcCsvFile)) {
+            return differencePrice < -2f || differencePrice > 2f;
+        }
+
         return false;
     }
 }

@@ -23,9 +23,6 @@ resources:
       batch-size: 64
       hidden-layers-neurons: 75
 
-    regression:
-      degree: 3
-
   deka:
     # Data
     csv-file: src/main/resources/deka/financeDeka.csv
@@ -38,6 +35,7 @@ resources:
       chart-file: src/main/resources/deka/AIModelTrainedDeka.png
 
     regression:
+      degree: 3
       function-file: src/main/resources/deka/regressionDeka.ser
       # Data Chart
       chart-file: src/main/resources/deka/regressionFunctionDeka.png
@@ -54,6 +52,7 @@ resources:
       chart-file: src/main/resources/btc/AIModelTrainedBTC.png
 
     regression:
+      degree: 20
       function-file: src/main/resources/btc/regressionBTC.ser
       # Data Chart
       chart-file: src/main/resources/btc/regressionFunctionBTC.png

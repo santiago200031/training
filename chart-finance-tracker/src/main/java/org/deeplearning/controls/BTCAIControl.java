@@ -39,7 +39,7 @@ public class BTCAIControl implements AIControl {
     @ConfigProperty(name = "resources.btc.csv-file")
     private String csvFile;
 
-    @ConfigProperty(name = "resources.ai.regression.degree")
+    @ConfigProperty(name = "resources.btc.regression.degree")
     private int degree;
 
     @ConfigProperty(name = "resources.btc.regression.function-file")
@@ -155,8 +155,11 @@ public class BTCAIControl implements AIControl {
 
     @Override
     public PolynomialFunction loadPolynomialFunction() {
-        // TODO
-        return null;
+        try {
+            return aiCommons.loadPolynomialFunction(functionFile);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public RecordReader createCsvRecordReader(String filePath) {

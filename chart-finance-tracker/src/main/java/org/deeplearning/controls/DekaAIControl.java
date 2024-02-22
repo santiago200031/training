@@ -40,7 +40,7 @@ public class DekaAIControl implements AIControl {
     @ConfigProperty(name = "resources.deka.csv-file")
     private String csvFile;
 
-    @ConfigProperty(name = "resources.ai.regression.degree")
+    @ConfigProperty(name = "resources.deka.regression.degree")
     private int degree;
 
     @ConfigProperty(name = "resources.deka.regression.function-file")

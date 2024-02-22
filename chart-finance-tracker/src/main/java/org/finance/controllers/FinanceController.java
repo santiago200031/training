@@ -4,9 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.finance.models.Finance;
 import org.finance.models.FinanceOffline;
-import org.finance.utils.CSVFileProperties;
 import org.finance.utils.ExternalApiEndpoints;
 import org.finance.utils.FinanceCSVReader;
 import org.finance.utils.FinanceParser;
@@ -21,6 +21,12 @@ import java.util.stream.Collectors;
 public class FinanceController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    @ConfigProperty(name = "resources.deka.csv-file")
+    private String dekaCsvFile;
+
+    @ConfigProperty(name = "resources.btc.csv-file")
+    private String btcCsvFile;
 
     @Inject
     FinanceParser financeParser;
@@ -76,12 +82,12 @@ public class FinanceController {
 
     public Finance getLastDekaFinance() {
         return financeCSVReader
-                .readLastFinanceCSV(CSVFileProperties.DEKA_FILE_PATH.getValue());
+                .readLastFinanceCSV(dekaCsvFile);
     }
 
     public Finance getLastBTCFinance() {
         return financeCSVReader
-                .readLastFinanceCSV(CSVFileProperties.BTC_FILE_PATH.getValue());
+                .readLastFinanceCSV(btcCsvFile);
     }
 
     public String getFinanceAsJson(Finance finance) {
@@ -105,8 +111,6 @@ public class FinanceController {
 
     public FinanceOffline getDekaGlobalChampionsLocalData() {
         return financeCSVReader
-                .readFinanceCSV(CSVFileProperties.DEKA_FILE_PATH.getValue());
+                .readFinanceCSV(dekaCsvFile);
     }
-
-
 }

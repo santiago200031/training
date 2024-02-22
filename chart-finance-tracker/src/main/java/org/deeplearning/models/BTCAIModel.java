@@ -46,7 +46,7 @@ public class BTCAIModel implements AIModel {
     private int evaluateEveryNEpochs;
     @ConfigProperty(name = "resources.ai.neural-network.log-every-n-epochs")
     private int logEveryNEpochs;
-    @ConfigProperty(name = "resources.ai.regression.degree")
+    @ConfigProperty(name = "resources.btc.regression.degree")
     private int degree;
 
     @Inject
